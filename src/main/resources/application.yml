@@ -1,0 +1,46 @@
+
+spring:
+  datasource:
+    username: postgres
+    password: 1234
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5433/postgres
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: Hikari
+      validation-timeout: 1000
+  application:
+    name: HrOnline
+  jpa:
+    open-in-view: false
+    properties:
+      javax:
+        persistence:
+          shared-cache:
+            mode: ENABLE_SELECTIVE
+      hibernate:
+        current_session_context_class: org.springframework.orm.hibernate5.SpringSessionContext
+        show_sql: true
+        generate_statistics: true
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          batch_size: 50000
+          fetch_size: 1000
+        session:
+          events:
+            log:
+              LOG_QUERIES_SLOWER_THAN_MS: 1
+        search:
+          backend:
+            analysis:
+              configurer: com.hronline.config.MyAnalysisConfigurer
+            directory:
+              type: local-filesystem
+              root: D:/apache_lucene/hronline
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      use-new-id-generator-mappings: true
+server:
+  port: 8090
