@@ -1,6 +1,8 @@
 package com.hronline.controller;
 
 import com.hronline.config.Oauth2Security;
+import com.hronline.entity.CorpIndustry;
+import com.hronline.services.CorpIndustryService;
 import com.hronline.util.HrConstant;
 import com.hronline.vm.CreateIndustryVM;
 import org.keycloak.KeycloakPrincipal;
@@ -23,6 +25,9 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+
+    @Autowired
+    private CorpIndustryService corpIndustryService;
 
     @GetMapping
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
@@ -79,6 +84,7 @@ public class AdminController {
             redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_ERROR_LIST, bindingResult.getAllErrors());
             return "redirect:/admin/industry/create";
         }
+        corpIndustryService.save(createIndustryVM);
         redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE, "Thêm mới ngành nghề thành công");
         return "redirect:/admin/industry/create";
     }

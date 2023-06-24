@@ -10,7 +10,6 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -26,6 +25,7 @@ public class CorpIndustry implements Serializable {
     @GenericGenerator(name = "hibernate-uuid", strategy = "uuid2")
     private String id;
 
+    // Tên ngành nghề của công ty
     @Column(length = 100)
     @FullTextField(analyzer = "customAnalyzer")
     private String name;
