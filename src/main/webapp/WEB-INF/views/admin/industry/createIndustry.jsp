@@ -4,6 +4,7 @@
 <%@ page import="org.springframework.validation.ObjectError" %>
 <%@ page import="java.util.List" %>
 <%@ page import="org.springframework.util.CollectionUtils" %>
+<%@ page import="com.hronline.util.HrConstant" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 
@@ -87,7 +88,7 @@
 
         <!-- Main content -->
         <div class="content">
-            <% String successMessage = (String) request.getAttribute("successMessage"); %>
+            <% String successMessage = (String) request.getAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE); %>
             <% if (successMessage != null) {%>
                 <div class="row alert-msg">
                     <div class="col-md-6">
@@ -99,7 +100,7 @@
                     </div>
                 </div>
             <%}%>
-            <% List<ObjectError> errorList = (List<ObjectError>) request.getAttribute("errorList"); %>
+            <% List<ObjectError> errorList = (List<ObjectError>) request.getAttribute(HrConstant.ATTRIBUTE_ERROR_LIST); %>
             <% if (!CollectionUtils.isEmpty(errorList)) {%>
                 <div class="row alert-msg">
                     <div class="col-md-6">

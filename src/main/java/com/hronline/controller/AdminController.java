@@ -1,6 +1,7 @@
 package com.hronline.controller;
 
 import com.hronline.config.Oauth2Security;
+import com.hronline.util.HrConstant;
 import com.hronline.vm.CreateIndustryVM;
 import org.keycloak.KeycloakPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,10 +76,10 @@ public class AdminController {
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
     public String createIndustrySubmit(HttpServletRequest request, @Valid @ModelAttribute CreateIndustryVM createIndustryVM, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("errorList", bindingResult.getAllErrors());
+            redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_ERROR_LIST, bindingResult.getAllErrors());
             return "redirect:/admin/industry/create";
         }
-        redirectAttributes.addFlashAttribute("successMessage", "Thêm mới ngành nghề thành công");
+        redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE, "Thêm mới ngành nghề thành công");
         return "redirect:/admin/industry/create";
     }
 }
