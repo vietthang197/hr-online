@@ -1,0 +1,15 @@
+{
+  "realm": "quickstart",
+  "auth-server-url": "http://localhost:8080",
+  "ssl-required": "external",
+  "resource": "authz-servlet",
+  "credentials": {
+    "secret": "secret"
+  },
+  "policy-enforcer": {
+    "path-cache": {
+      "lifespan": 1,
+      "max-entries": 1
+    }
+  }
+}
