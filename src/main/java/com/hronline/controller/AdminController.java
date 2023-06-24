@@ -17,12 +17,21 @@ import java.security.Principal;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @Autowired
-    private Oauth2Security oauth2Security;
-
     @GetMapping
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
-    public String admin(HttpServletRequest request) {
+    public String adminHome(HttpServletRequest request) {
+        return "redirect:/admin/job";
+    }
+
+    @GetMapping("/job")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    public String jobList(HttpServletRequest request) {
         return "admin/index";
+    }
+
+    @GetMapping("/job/create")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    public String createJob(HttpServletRequest request) {
+        return "admin/createJob";
     }
 }
