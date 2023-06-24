@@ -1,6 +1,7 @@
 package com.hronline.config;
 
 import org.keycloak.AuthorizationContext;
+import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 public class Oauth2Security  {
 
     public boolean hasResourcePermission(HttpServletRequest httpServletRequest, String resourceName, String scope) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof AnonymousAuthenticationToken) {
+            return false;
+        }
         KeycloakSecurityContext keycloakSecurityContext = (KeycloakSecurityContext) httpServletRequest.getAttribute(KeycloakSecurityContext.class.getName());
         AuthorizationContext authzContext = keycloakSecurityContext.getAuthorizationContext();
         return authzContext.hasPermission(resourceName, scope);
@@ -29,5 +34,15 @@ public class Oauth2Security  {
     public boolean isAnonymous() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication instanceof AnonymousAuthenticationToken;
+    }
+
+    public String getUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof AnonymousAuthenticationToken) {
+            return null;
+        }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        KeycloakPrincipal principal = (KeycloakPrincipal)auth.getPrincipal();
+        return principal.getKeycloakSecurityContext().getToken().getPreferredUsername();
     }
 }

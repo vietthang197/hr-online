@@ -1,5 +1,14 @@
+<%@ page import="org.springframework.web.servlet.support.RequestContextUtils" %>
+<%@ page import="org.springframework.context.ApplicationContext" %>
+<%@ page import="com.hronline.config.Oauth2Security" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
+
+<%
+    ApplicationContext applicationContext = RequestContextUtils.findWebApplicationContext(request);
+    Oauth2Security oauth2Security = (Oauth2Security) applicationContext.getBean("oauth2Security");
+%>
+
 <header
         class="relative z-50 w-full flex-none text-sm font-semibold leading-6 text-slate-900">
     <nav class="bg-white border-gray-200 dark:bg-gray-900">
@@ -45,6 +54,34 @@
                            class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Liên
                             hệ</a>
                     </li>
+
+                    <% if (oauth2Security.hasResourcePermission(request, "Admin Resource", "urn:servlet-authz:protected:admin:access")) {%>
+                    <li>
+                        <a href="/admin"
+                           class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Quản lý
+                        </a>
+                    </li>
+                    <%}%>
+
+                    <% if (oauth2Security.isAuthenticated()) {%>
+                    <li>
+                        <a href="/user"
+                           class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Cv của tôi
+                        </a>
+                    </li>
+                    <%}%>
+
+                    <% if (oauth2Security.isAuthenticated()) { %>
+                    <li>
+                        <a href="/sso/logout"
+                           class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Đăng xuất</a>
+                    </li>
+                    <% } else { %>
+                    <li>
+                        <a href="/sso/login"
+                           class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Đăng nhập/ Đăng ký</a>
+                    </li>
+                    <% } %>
                 </ul>
             </div>
         </div>

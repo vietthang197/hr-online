@@ -39,9 +39,8 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         super.configure(http);
         http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/sso/logout")).permitAll().logoutSuccessUrl("/").and()
                 .authorizeRequests()
-                .antMatchers("/", "/error/access-denied", "/resources/**").permitAll()
+                .antMatchers("/", "/error/*", "/resources/**", "/job-detail", "/search-job", "/blog", "/about").permitAll()
                 .anyRequest().authenticated()
-                .and().exceptionHandling().accessDeniedPage("/error/access-denied")
                 .and().csrf().disable();
     }
 }
