@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <script src="/resources/adminlte/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="/resources/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="/resources/adminlte/plugins/datatables-select/js/dataTables.select.min.js"></script>
 <script src="/resources/adminlte/plugins/datatables-select/js/select.bootstrap4.min.js"></script>
 <script src="/resources/adminlte/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
@@ -26,3 +25,4 @@
 <script src="/resources/adminlte/plugins/datatables-rowreorder/js/rowReorder.bootstrap4.min.js"></script>
 <script src="/resources/adminlte/plugins/datatables-scroller/js/dataTables.scroller.min.js"></script>
 <script src="/resources/adminlte/plugins/datatables-scroller/js/scroller.bootstrap4.min.js"></script>
+<script src="/resources/adminlte/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>

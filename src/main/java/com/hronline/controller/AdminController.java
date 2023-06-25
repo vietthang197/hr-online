@@ -88,4 +88,11 @@ public class AdminController {
         redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE, "Thêm mới ngành nghề thành công");
         return "redirect:/admin/industry/create";
     }
+
+    @PostMapping("/industry/search")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    @ResponseBody
+    public String searchIndustry(HttpServletRequest request) {
+        return "{\"key\":\"value\"}";
+    }
 }

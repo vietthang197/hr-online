@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NoArgsConstructor
-@SuperBuilder
 public class SuperEntity {
 
     @Column(name = "create_by", length = 100)
@@ -41,7 +40,7 @@ public class SuperEntity {
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             KeycloakPrincipal principal = (KeycloakPrincipal) authentication.getPrincipal();
             if (principal != null)
-                this.createdBy = principal.getName();
+                this.createdBy = principal.getKeycloakSecurityContext().getToken().getPreferredUsername();
         }
     }
 
@@ -52,7 +51,7 @@ public class SuperEntity {
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
             KeycloakPrincipal principal = (KeycloakPrincipal) authentication.getPrincipal();
             if (principal != null)
-                this.modifyBy = principal.getName();
+                this.modifyBy = principal.getKeycloakSecurityContext().getToken().getPreferredUsername();
         }
     }
 }
