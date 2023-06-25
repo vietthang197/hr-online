@@ -78,7 +78,7 @@ public class AdminController {
     }
 
     @PostMapping("/industry/create")
-    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    @PreAuthorize("@oauth2Security.hasMultipleResourcePermission(#request, T(java.util.Arrays).asList(new com.hronline.obj.AuthzRequest('Admin Resource', T(java.util.Arrays).asList('urn:servlet-authz:protected:admin:access')), new com.hronline.obj.AuthzRequest('Corp Industry Resource', T(java.util.Arrays).asList('urn:servlet-authz:protected:admin:industry:create'))))")
     public String createIndustrySubmit(HttpServletRequest request, @Valid @ModelAttribute CreateIndustryVM createIndustryVM, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_ERROR_LIST, bindingResult.getAllErrors());

@@ -1,5 +1,6 @@
 package com.hronline.config;
 
+import com.hronline.obj.AuthzRequest;
 import org.keycloak.AuthorizationContext;
 import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.List;
 
 @Component("oauth2Security")
 public class Oauth2Security  {
@@ -32,6 +34,21 @@ public class Oauth2Security  {
         KeycloakSecurityContext keycloakSecurityContext = (KeycloakSecurityContext) httpServletRequest.getAttribute(KeycloakSecurityContext.class.getName());
         AuthorizationContext authzContext = keycloakSecurityContext.getAuthorizationContext();
         return Arrays.stream(scopes).allMatch(item -> authzContext.hasPermission(resourceName, item));
+    }
+
+    public boolean hasMultipleResourcePermission(HttpServletRequest httpServletRequest, List<AuthzRequest> authzRequestList) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication instanceof AnonymousAuthenticationToken) {
+            return false;
+        }
+        KeycloakSecurityContext keycloakSecurityContext = (KeycloakSecurityContext) httpServletRequest.getAttribute(KeycloakSecurityContext.class.getName());
+        AuthorizationContext authzContext = keycloakSecurityContext.getAuthorizationContext();
+        boolean hasPerm = true;
+        for (int i = 0; i < authzRequestList.size() && hasPerm; i++) {
+            AuthzRequest request = authzRequestList.get(i);
+            hasPerm = request.getScopes().stream().allMatch(item -> authzContext.hasPermission(request.getResourceName(), item));
+        }
+        return hasPerm;
     }
 
     public boolean isAuthenticated() {

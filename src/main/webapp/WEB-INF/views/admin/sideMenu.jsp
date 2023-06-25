@@ -1,5 +1,12 @@
+<%@ page import="org.springframework.web.servlet.support.RequestContextUtils" %>
+<%@ page import="com.hronline.config.Oauth2Security" %>
+<%@ page import="org.springframework.context.ApplicationContext" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
+<%
+    ApplicationContext applicationContext = RequestContextUtils.findWebApplicationContext(request);
+    Oauth2Security oauth2Security = (Oauth2Security) applicationContext.getBean("oauth2Security");
+%>
 <nav class="mt-2">
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <li class="nav-item menu-open">
@@ -80,12 +87,14 @@
                         <p>Danh sách ngành nghề</p>
                     </a>
                 </li>
+                <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:create")) {%>
                 <li class="nav-item">
                     <a href="/admin/industry/create" class="nav-link <% if (request.getAttribute("javax.servlet.forward.servlet_path").equals("/admin/industry/create")) { %> active<%}%>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Thêm mới ngành nghề công ty</p>
                     </a>
                 </li>
+                <%}%>
             </ul>
         </li>
     </ul>
