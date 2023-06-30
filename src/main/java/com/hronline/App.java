@@ -34,13 +34,18 @@ public class App extends SpringBootServletInitializer implements CommandLineRunn
     @Override
     @Transactional
     public void run(String... args) throws Exception {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        SearchSession searchSession = Search.session( entityManager );
+        EntityManager entityManager = null;
+        try {
+            entityManager = entityManagerFactory.createEntityManager();
+            SearchSession searchSession = Search.session( entityManager );
 
-        MassIndexer indexer = searchSession.massIndexer( CorpIndustry.class )
-                .threadsToLoadObjects( 7 );
+            MassIndexer indexer = searchSession.massIndexer( CorpIndustry.class )
+                    .threadsToLoadObjects( 7 );
 
-        indexer.startAndWait();
-        entityManager.close();
+            indexer.startAndWait();
+        } finally {
+            if (entityManager != null)
+                entityManager.close();
+        }
     }
 }
