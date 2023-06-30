@@ -76,8 +76,6 @@ $(document).ready(function () {
 
                 return JSON.stringify(dataRes);
             }
-        }, infoCallback: function ( settings, start, end, max, total, pre ) {
-            console.log('Chay vao day')
         }
     });
 
