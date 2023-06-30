@@ -96,7 +96,7 @@ public class CommonSearchServiceImpl<T, I extends BaseObjPagination> implements 
             logger.info("ObjectSearchMetaData: {}", metaDataMap);
             SearchSession searchSession = Search.session(entityManager);
             SearchQueryFinalStep<T> queryFinalStep = searchSession.search(entityClass).where(f -> f.bool(b -> {
-                b.must(f.matchAll());
+//                b.must(f.matchAll());
                 for (Map.Entry<String, ColumnMetaData> column : metaDataMap.entrySet()) {
                     ColumnMetaData columMeta = column.getValue();
                     if (columMeta.getSearchType() == SearchType.MATCH && columMeta.getValueSearch() != null) {

@@ -1,9 +1,13 @@
 package com.hronline.controller;
 
 import com.hronline.config.Oauth2Security;
+import com.hronline.dto.BasicResponseDto;
+import com.hronline.dto.CorpIndustryDto;
+import com.hronline.dto.PaginationDto;
 import com.hronline.entity.CorpIndustry;
 import com.hronline.services.CorpIndustryService;
 import com.hronline.util.HrConstant;
+import com.hronline.vm.CorpIndustrySearchVM;
 import com.hronline.vm.CreateIndustryVM;
 import org.keycloak.KeycloakPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,9 +94,9 @@ public class AdminController {
     }
 
     @PostMapping("/industry/search")
-    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+//    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
     @ResponseBody
-    public String searchIndustry(HttpServletRequest request) {
-        return "{\"key\":\"value\"}";
+    public BasicResponseDto<PaginationDto<CorpIndustryDto>> searchIndustry(HttpServletRequest request, @RequestBody CorpIndustrySearchVM searchVM) {
+        return corpIndustryService.search(searchVM);
     }
 }

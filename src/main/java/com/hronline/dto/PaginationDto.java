@@ -1,7 +1,9 @@
 package com.hronline.dto;
 
 import lombok.Data;
+import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +11,8 @@ import java.util.List;
  * @project recruiter-api
  */
 @Data
-public class PaginationDto<T> {
+@ToString
+public class PaginationDto<T> implements Serializable {
     private int page;
     private int size;
     private long total;

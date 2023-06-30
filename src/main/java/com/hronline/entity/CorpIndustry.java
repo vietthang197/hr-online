@@ -2,7 +2,11 @@ package com.hronline.entity;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.DocumentId;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 import javax.persistence.*;
@@ -16,11 +20,13 @@ import java.io.Serializable;
 @Entity
 @Table(name = "corp_industry")
 @Indexed
+@ToString
 public class CorpIndustry extends SuperEntity implements Serializable {
 
     @Id
     @GeneratedValue(generator = "hibernate-uuid")
     @GenericGenerator(name = "hibernate-uuid", strategy = "uuid2")
+    @GenericField(sortable = Sortable.YES)
     private String id;
 
     // Tên ngành nghề của công ty

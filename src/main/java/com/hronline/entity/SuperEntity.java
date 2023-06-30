@@ -1,9 +1,6 @@
 package com.hronline.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.keycloak.KeycloakPrincipal;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -19,6 +16,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @NoArgsConstructor
+@ToString
 public class SuperEntity {
 
     @Column(name = "create_by", length = 100)
