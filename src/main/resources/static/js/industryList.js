@@ -84,15 +84,15 @@ $(document).ready(function () {
     $('#btnSearchDataTable').click(function (e) {
         e.preventDefault();
         e.stopPropagation();
-        objectSearch.name = $('#s_name').val();
+        objectSearch.name = $('#s_name').val() == '' ? null : $('#s_name').val();
         dataTable.search({...objectSearch}).draw()
     })
 
     $('#btnClearFormSearch').click(function (e) {
         e.preventDefault();
         e.stopPropagation();
-        $('#s_name').val(null);
-        objectSearch.name = $('#s_name').val();
+        $('#s_name').val('');
+        objectSearch.name = null;
         dataTable.search({...objectSearch}).draw()
     });
 });
