@@ -3,17 +3,21 @@ package com.hronline.services.impl;
 import com.hronline.annotation.SearchColumn;
 import com.hronline.dto.PaginationDto;
 import com.hronline.exception.SearchEngineException;
-import com.hronline.obj.ColumnMetaData;
-import com.hronline.obj.DataType;
-import com.hronline.obj.Position;
-import com.hronline.obj.SearchType;
+import com.hronline.obj.*;
 import com.hronline.services.CommonSearchService;
 import com.hronline.util.HrUtils;
 import com.hronline.vm.BaseObjPagination;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.util.Strings;
+import org.apache.lucene.search.SortField;
+import org.hibernate.search.backend.lucene.search.sort.impl.LuceneSearchSort;
+import org.hibernate.search.backend.lucene.search.sort.impl.LuceneSearchSortCollector;
 import org.hibernate.search.engine.search.query.dsl.SearchQueryFinalStep;
+import org.hibernate.search.engine.search.query.dsl.SearchQueryOptionsStep;
+import org.hibernate.search.engine.search.sort.SearchSort;
+import org.hibernate.search.engine.search.sort.dsl.SearchSortFactory;
+import org.hibernate.search.engine.search.sort.dsl.SortFinalStep;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.springframework.stereotype.Repository;
@@ -23,7 +27,9 @@ import javax.persistence.EntityManager;
 import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.function.Function;
 
 @Repository
 @Transactional(
@@ -40,8 +46,7 @@ public class CommonSearchServiceImpl<T, I extends BaseObjPagination> implements 
     @Override
     public PaginationDto<T> searchData(I objSearch, Class<T> entityClass) {
         PaginationDto<T> paginationDto = new PaginationDto<>();
-        paginationDto.setPage(objSearch.getPage());
-        paginationDto.setSize(objSearch.getSize());
+        paginationDto.setDraw(objSearch.getDraw());
         try {
             logger.info("==========Searching object {}==========", objSearch.getClass().getName());
             // convert object search sang ColumnMetaData
@@ -96,7 +101,7 @@ public class CommonSearchServiceImpl<T, I extends BaseObjPagination> implements 
             logger.info("ObjectSearchMetaData: {}", metaDataMap);
             SearchSession searchSession = Search.session(entityManager);
             SearchQueryFinalStep<T> queryFinalStep = searchSession.search(entityClass).where(f -> f.bool(b -> {
-//                b.must(f.matchAll());
+                b.must(f.matchAll());
                 for (Map.Entry<String, ColumnMetaData> column : metaDataMap.entrySet()) {
                     ColumnMetaData columMeta = column.getValue();
                     if (columMeta.getSearchType() == SearchType.MATCH && columMeta.getValueSearch() != null) {
@@ -115,19 +120,21 @@ public class CommonSearchServiceImpl<T, I extends BaseObjPagination> implements 
                         }
                     }
                 }
-            }));
-            paginationDto.setTotal(queryFinalStep.fetchTotalHitCount());
-            paginationDto.setData(queryFinalStep.fetchHits(objSearch.getPage() * objSearch.getSize(), objSearch.getSize()));
+            })).sort(searchSortFactory -> searchSortFactory.field("createdDate").desc());
+            paginationDto.setRecordsTotal(queryFinalStep.fetchTotalHitCount());
+            paginationDto.setData(queryFinalStep.fetchHits(objSearch.getStart() * objSearch.getLength(), objSearch.getLength()));
+            paginationDto.setRecordsFiltered(paginationDto.getData().size());
             logger.info("Data searching: {}", paginationDto);
             return paginationDto;
         } catch (Exception e) {
             logger.error("Lỗi search engine", e);
-            paginationDto.setTotal(0L);
-            paginationDto.setSize(0);
+            paginationDto.setRecordsTotal(0L);
+            paginationDto.setRecordsFiltered(0);
             paginationDto.setData(Collections.emptyList());
         } finally {
             logger.info("============= End Searching===========");
         }
+        paginationDto.setDraw(objSearch.getDraw());
         return paginationDto;
     }
 }

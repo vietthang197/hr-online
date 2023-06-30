@@ -35,9 +35,9 @@ public interface CorpIndustryMapper {
 
         PaginationDto<CorpIndustryDto> paginationDto = new PaginationDto<CorpIndustryDto>();
 
-        paginationDto.setPage( industryPagination.getPage() );
-        paginationDto.setSize( industryPagination.getSize() );
-        paginationDto.setTotal( industryPagination.getTotal() );
+        paginationDto.setRecordsFiltered( industryPagination.getRecordsFiltered() );
+        paginationDto.setDraw( industryPagination.getDraw() );
+        paginationDto.setRecordsTotal( industryPagination.getRecordsTotal() );
         paginationDto.setData( corpIndustryListToCorpIndustryDtoList( industryPagination.getData() ) );
 
         return paginationDto;

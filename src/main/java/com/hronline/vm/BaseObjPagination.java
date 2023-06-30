@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Setter
@@ -12,6 +13,10 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BaseObjPagination implements Serializable {
-    private Integer page;
-    private Integer size;
+    @NotNull
+    private Long draw;
+    @NotNull
+    private Integer start;
+    @NotNull
+    private Integer length;
 }

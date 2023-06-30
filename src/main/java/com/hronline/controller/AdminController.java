@@ -96,7 +96,7 @@ public class AdminController {
     @PostMapping("/industry/search")
 //    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
     @ResponseBody
-    public BasicResponseDto<PaginationDto<CorpIndustryDto>> searchIndustry(HttpServletRequest request, @RequestBody CorpIndustrySearchVM searchVM) {
+    public BasicResponseDto<PaginationDto<CorpIndustryDto>> searchIndustry(HttpServletRequest request, @Valid @RequestBody CorpIndustrySearchVM searchVM) {
         return corpIndustryService.search(searchVM);
     }
 }

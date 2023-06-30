@@ -13,8 +13,8 @@ import java.util.List;
 @Data
 @ToString
 public class PaginationDto<T> implements Serializable {
-    private int page;
-    private int size;
-    private long total;
+    private Long draw;
+    private Integer recordsFiltered;
+    private Long recordsTotal;
     private List<T> data;
 }

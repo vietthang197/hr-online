@@ -2,6 +2,12 @@ package com.hronline.entity;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.search.engine.backend.types.Searchable;
+import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.bridge.builtin.impl.DefaultLocalDateTimeBridge;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
+import org.hibernate.validator.cfg.defs.ISBNDef;
 import org.keycloak.KeycloakPrincipal;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,12 +29,14 @@ public class SuperEntity {
     private String createdBy;
 
     @Column(name = "create_date")
+    @GenericField(sortable = Sortable.YES)
     private LocalDateTime createdDate;
 
     @Column(name = "modify_by", length = 100)
     private String modifyBy;
 
     @Column(name = "modify_date")
+    @GenericField(sortable = Sortable.YES)
     private LocalDateTime modifyDate;
 
     @PrePersist

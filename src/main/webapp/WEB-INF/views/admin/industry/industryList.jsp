@@ -171,6 +171,6 @@
 <jsp:include page="../common/importDataTableJs.jsp"/>
 <!-- Data table -->
 
-<script src="/resources/js/industry.js"></script>
+<script src="/resources/js/industryList.js"></script>
 </body>
 </html>
