@@ -9,6 +9,7 @@ import com.hronline.services.CorpIndustryService;
 import com.hronline.util.HrConstant;
 import com.hronline.vm.CorpIndustrySearchVM;
 import com.hronline.vm.CreateIndustryVM;
+import com.hronline.vm.DeleteEntityVM;
 import org.keycloak.KeycloakPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -94,9 +95,16 @@ public class AdminController {
     }
 
     @PostMapping("/industry/search")
-//    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
     @ResponseBody
     public BasicResponseDto<PaginationDto<CorpIndustryDto>> searchIndustry(HttpServletRequest request, @Valid @RequestBody CorpIndustrySearchVM searchVM) {
         return corpIndustryService.search(searchVM);
+    }
+
+    @DeleteMapping("/industry/delete")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    @ResponseBody
+    public BasicResponseDto<Void> searchIndustry(HttpServletRequest request, @Valid @RequestBody DeleteEntityVM deleteEntityVM) {
+        return corpIndustryService.delete(deleteEntityVM);
     }
 }

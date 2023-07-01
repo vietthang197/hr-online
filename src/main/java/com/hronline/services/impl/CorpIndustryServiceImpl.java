@@ -10,6 +10,7 @@ import com.hronline.services.CommonSearchService;
 import com.hronline.services.CorpIndustryService;
 import com.hronline.vm.CorpIndustrySearchVM;
 import com.hronline.vm.CreateIndustryVM;
+import com.hronline.vm.DeleteEntityVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,9 +41,17 @@ public class CorpIndustryServiceImpl implements CorpIndustryService {
     }
 
     @Override
+    @Transactional
     public BasicResponseDto<PaginationDto<CorpIndustryDto>> search(CorpIndustrySearchVM searchVM) {
         PaginationDto<CorpIndustry> industryPagination = commonSearchService.searchData(searchVM, CorpIndustry.class);
         PaginationDto<CorpIndustryDto> response = corpIndustryMapper.toPaginationDto(industryPagination);
         return BasicResponseDto.ok(response);
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public BasicResponseDto<Void> delete(DeleteEntityVM deleteEntityVM) {
+         corpIndustryRepository.deleteAllById(deleteEntityVM.getIds());
+         return BasicResponseDto.ok();
     }
 }

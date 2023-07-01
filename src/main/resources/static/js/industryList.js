@@ -93,4 +93,33 @@ $(document).ready(function () {
         objectSearch.name = null;
         dataTable.search({...objectSearch}).draw()
     });
+
+    $('#deleteMultiRowDataTable').click(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const counter = dataTable.rows({ selected: true }).count();
+        if (counter == 0) {
+            alert('Bạn phải chọn các bản ghi trước khi xoá!');
+            return;
+        }
+
+        const chooser = confirm('Bạn có muốn xoá các bản ghi được chọn?');
+        if (chooser) {
+            const ids = dataTable.rows({ selected: true }).data().map(item => item.id).toArray();
+            if (ids) {
+                $.ajax({
+                    url: '/admin/industry/delete',
+                    method: 'DELETE',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        ids: ids
+                    }),
+                    complete: function () {
+                        // location.reload()
+                    }
+                })
+            }
+        }
+    })
 });
