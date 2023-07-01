@@ -116,7 +116,7 @@ $(document).ready(function () {
                         ids: ids
                     }),
                     complete: function () {
-                        // location.reload()
+                        location.reload()
                     }
                 })
             }

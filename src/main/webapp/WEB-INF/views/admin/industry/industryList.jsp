@@ -114,7 +114,9 @@
                             <div class="card-body card-wrap-data-table">
                                 <div class="row mb-4">
                                     <div class="col-md-12">
+                                        <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:delete")) { %>
                                         <button class="btn btn-danger btn-sm" id="deleteMultiRowDataTable"><i class="fas fa-trash"></i> Xoá bản ghi</button>
+                                        <% } %>
                                     </div>
                                 </div>
                                 <table id="dataTable" class="table table-striped table-bordered display nowrap" style="width:100%">

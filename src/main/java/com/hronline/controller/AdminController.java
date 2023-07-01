@@ -102,7 +102,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/industry/delete")
-    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp Industry Resource', 'urn:servlet-authz:protected:admin:industry:delete')")
     @ResponseBody
     public BasicResponseDto<Void> searchIndustry(HttpServletRequest request, @Valid @RequestBody DeleteEntityVM deleteEntityVM) {
         return corpIndustryService.delete(deleteEntityVM);

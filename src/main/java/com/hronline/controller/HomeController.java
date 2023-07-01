@@ -11,7 +11,6 @@ public class HomeController {
 
     @GetMapping("/")
     public String homePage() {
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
         return "public/index";
     }
 
