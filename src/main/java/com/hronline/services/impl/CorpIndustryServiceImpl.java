@@ -4,6 +4,7 @@ import com.hronline.dto.BasicResponseDto;
 import com.hronline.dto.CorpIndustryDto;
 import com.hronline.dto.PaginationDto;
 import com.hronline.entity.CorpIndustry;
+import com.hronline.exception.BindingResultException;
 import com.hronline.mapper.CorpIndustryMapper;
 import com.hronline.repository.CorpIndustryRepository;
 import com.hronline.services.CommonSearchService;
@@ -11,10 +12,12 @@ import com.hronline.services.CorpIndustryService;
 import com.hronline.vm.CorpIndustrySearchVM;
 import com.hronline.vm.CreateIndustryVM;
 import com.hronline.vm.DeleteEntityVM;
+import com.hronline.vm.UpdateCorpIndustryVM;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 public class CorpIndustryServiceImpl implements CorpIndustryService {
@@ -53,5 +56,23 @@ public class CorpIndustryServiceImpl implements CorpIndustryService {
     public BasicResponseDto<Void> delete(DeleteEntityVM deleteEntityVM) {
          corpIndustryRepository.deleteAllById(deleteEntityVM.getIds());
          return BasicResponseDto.ok();
+    }
+
+    @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void update(UpdateCorpIndustryVM updateCorpIndustryVM) throws BindingResultException {
+        Optional<CorpIndustry> corpIndustryOptional = corpIndustryRepository.findById(updateCorpIndustryVM.getId());
+        if (corpIndustryOptional.isEmpty()) {
+            throw new BindingResultException("Id ngành nghề không tồn tại");
+        }
+        CorpIndustry corpIndustry = corpIndustryOptional.get();
+        corpIndustry.setName(updateCorpIndustryVM.getName());
+        corpIndustryRepository.save(corpIndustry);
+    }
+
+    @Override
+    @Transactional
+    public Optional<CorpIndustry> findById(String id) {
+        return corpIndustryRepository.findById(id);
     }
 }

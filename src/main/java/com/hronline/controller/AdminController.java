@@ -5,11 +5,14 @@ import com.hronline.dto.BasicResponseDto;
 import com.hronline.dto.CorpIndustryDto;
 import com.hronline.dto.PaginationDto;
 import com.hronline.entity.CorpIndustry;
+import com.hronline.exception.BindingResultException;
 import com.hronline.services.CorpIndustryService;
 import com.hronline.util.HrConstant;
 import com.hronline.vm.CorpIndustrySearchVM;
 import com.hronline.vm.CreateIndustryVM;
 import com.hronline.vm.DeleteEntityVM;
+import com.hronline.vm.UpdateCorpIndustryVM;
+import org.apache.http.HttpStatus;
 import org.keycloak.KeycloakPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,8 +27,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import java.io.IOException;
 import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
@@ -104,14 +111,36 @@ public class AdminController {
     @DeleteMapping("/corp-industry/delete")
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp Industry Resource', 'urn:servlet-authz:protected:admin:industry:delete')")
     @ResponseBody
-    public BasicResponseDto<Void> searchIndustry(HttpServletRequest request, @Valid @RequestBody DeleteEntityVM deleteEntityVM) {
+    public BasicResponseDto<Void> deleteCorpIndustry(HttpServletRequest request, @Valid @RequestBody DeleteEntityVM deleteEntityVM) {
         return corpIndustryService.delete(deleteEntityVM);
     }
 
     @GetMapping("/corp-industry/edit/{id}")
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp Industry Resource', 'urn:servlet-authz:protected:admin:industry:edit')")
-    public String corpIndustryEdit(HttpServletRequest request, @PathVariable String id, Model model) {
+    public String corpIndustryEdit(HttpServletRequest request, HttpServletResponse response, @Valid @NotBlank @PathVariable String id, Model model) throws IOException {
+        Optional<CorpIndustry> corpIndustryOptional = corpIndustryService.findById(id);
+        if (corpIndustryOptional.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            model.addAttribute("corpIndustryName", corpIndustryOptional.get().getName());
+        }
         model.addAttribute("corpIndustryId", id);
         return "admin/industry/industryEdit";
+    }
+
+    @PostMapping("/corp-industry/edit")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp Industry Resource', 'urn:servlet-authz:protected:admin:industry:edit')")
+    public String corpIndustryEdit(HttpServletRequest request, @Valid @ModelAttribute UpdateCorpIndustryVM updateCorpIndustryVM, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_ERROR_LIST, bindingResult.getAllErrors());
+            return "redirect:/admin/corp-industry/edit/" + updateCorpIndustryVM.getId();
+        }
+        try {
+            corpIndustryService.update(updateCorpIndustryVM);
+        } catch (BindingResultException e) {
+            bindingResult.reject(String.valueOf(HttpStatus.SC_BAD_REQUEST), e.getMessage());
+            return "redirect:/admin/corp-industry/edit/" + updateCorpIndustryVM.getId();
+        }
+        return "redirect:/admin/corp-industry";
     }
 }

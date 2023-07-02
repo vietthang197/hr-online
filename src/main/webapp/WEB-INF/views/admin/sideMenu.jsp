@@ -19,13 +19,13 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="/admin/job" class="nav-link <% if (request.getAttribute("javax.servlet.forward.servlet_path").equals("/admin/job")) { %> active<%}%>">
+                    <a href="/admin/job" class="nav-link <% if ("/admin/job".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Danh sách job</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/job/create" class="nav-link <% if (request.getAttribute("javax.servlet.forward.servlet_path").equals("/admin/job/create")) { %> active<%}%>">
+                    <a href="/admin/job/create" class="nav-link <% if ("/admin/job/create".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Thêm mới Job</p>
                     </a>
@@ -42,7 +42,7 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="/admin/employee" class="nav-link <% if (request.getAttribute("javax.servlet.forward.servlet_path").equals("/admin/employee")) { %> active<%}%>">
+                    <a href="/admin/employee" class="nav-link <% if ("/admin/employee".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Danh sách cv</p>
                     </a>
@@ -59,13 +59,13 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="/admin/corp" class="nav-link <% if (request.getAttribute("javax.servlet.forward.servlet_path").equals("/admin/corp")) { %> active<%}%>">
+                    <a href="/admin/corp" class="nav-link <% if ("/admin/corp".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Danh sách công ty</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/corp/create" class="nav-link <% if (request.getAttribute("javax.servlet.forward.servlet_path").equals("/admin/corp/create")) { %> active<%}%>">
+                    <a href="/admin/corp/create" class="nav-link <% if ("/admin/corp/create".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Thêm mới công ty</p>
                     </a>
@@ -82,14 +82,14 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="/admin/corp-industry" class="nav-link <% if (request.getAttribute("javax.servlet.forward.servlet_path").equals("/admin/corp-industry")) { %> active<%}%>">
+                    <a href="/admin/corp-industry" class="nav-link <% if ("/admin/corp-industry".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Danh sách ngành nghề</p>
                     </a>
                 </li>
                 <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:create")) {%>
                 <li class="nav-item">
-                    <a href="/admin/corp-industry/create" class="nav-link <% if (request.getAttribute("javax.servlet.forward.servlet_path").equals("/admin/corp-industry/create")) { %> active<%}%>">
+                    <a href="/admin/corp-industry/create" class="nav-link <% if ("/admin/corp-industry/create".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Thêm mới ngành nghề công ty</p>
                     </a>

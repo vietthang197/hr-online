@@ -120,12 +120,12 @@
             </div>
             <%}%>
             <div class="container-fluid">
-                <form action="/admin/corp-industry/create" method="POST">
+                <form action="/admin/corp-industry/edit" method="POST">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="corpName">Tên ngành nghề <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="corpName"  name="name" placeholder="Công ty A..." required>
+                                <input type="text" class="form-control" id="corpName"  name="name" placeholder="Công ty A..." value="<%=(String) request.getAttribute("corpIndustryName")%>" required>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -135,7 +135,7 @@
                         </div>
                     </div>
                     <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:create")) { %>
-                    <button type="submit" class="btn btn-warning">Sửa</button>
+                    <button type="submit" class="btn btn-warning btn-sm">Cập nhật</button>
                     <%}%>
                 </form>
                 <!-- /.row -->

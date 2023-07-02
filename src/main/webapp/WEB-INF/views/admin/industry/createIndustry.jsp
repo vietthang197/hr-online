@@ -130,7 +130,7 @@
                         </div>
                     </div>
                     <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:create")) { %>
-                        <button type="submit" class="btn btn-primary">Thêm</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Thêm</button>
                     <%}%>
                 </form>
                 <!-- /.row -->
