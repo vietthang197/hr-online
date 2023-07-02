@@ -70,41 +70,47 @@ public class AdminController {
         return "admin/corp/createCorp";
     }
 
-    @GetMapping("/industry")
+    @GetMapping("/corp-industry")
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
     public String corpIndustryList(HttpServletRequest request) {
         return "admin/industry/industryList";
     }
 
-    @GetMapping("/industry/create")
+    @GetMapping("/corp-industry/create")
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
     public String createIdustry(HttpServletRequest request) {
         return "admin/industry/createIndustry";
     }
 
-    @PostMapping("/industry/create")
+    @PostMapping("/corp-industry/create")
     @PreAuthorize("@oauth2Security.hasMultipleResourcePermission(#request, T(java.util.Arrays).asList(new com.hronline.obj.AuthzRequest('Admin Resource', T(java.util.Arrays).asList('urn:servlet-authz:protected:admin:access')), new com.hronline.obj.AuthzRequest('Corp Industry Resource', T(java.util.Arrays).asList('urn:servlet-authz:protected:admin:industry:create'))))")
     public String createIndustrySubmit(HttpServletRequest request, @Valid @ModelAttribute CreateIndustryVM createIndustryVM, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_ERROR_LIST, bindingResult.getAllErrors());
-            return "redirect:/admin/industry/create";
+            return "redirect:/admin/corp-industry/create";
         }
         corpIndustryService.save(createIndustryVM);
         redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE, "Thêm mới ngành nghề thành công");
-        return "redirect:/admin/industry/create";
+        return "redirect:/admin/corp-industry/create";
     }
 
-    @PostMapping("/industry/search")
+    @PostMapping("/corp-industry/search")
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
     @ResponseBody
     public BasicResponseDto<PaginationDto<CorpIndustryDto>> searchIndustry(HttpServletRequest request, @Valid @RequestBody CorpIndustrySearchVM searchVM) {
         return corpIndustryService.search(searchVM);
     }
 
-    @DeleteMapping("/industry/delete")
+    @DeleteMapping("/corp-industry/delete")
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp Industry Resource', 'urn:servlet-authz:protected:admin:industry:delete')")
     @ResponseBody
     public BasicResponseDto<Void> searchIndustry(HttpServletRequest request, @Valid @RequestBody DeleteEntityVM deleteEntityVM) {
         return corpIndustryService.delete(deleteEntityVM);
+    }
+
+    @GetMapping("/corp-industry/edit/{id}")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp Industry Resource', 'urn:servlet-authz:protected:admin:industry:edit')")
+    public String corpIndustryEdit(HttpServletRequest request, @PathVariable String id) {
+        return "admin/industry/industryEdit";
     }
 }

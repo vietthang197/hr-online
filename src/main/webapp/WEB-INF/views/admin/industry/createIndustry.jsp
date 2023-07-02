@@ -51,12 +51,14 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <!-- Sidebar user panel (optional) -->
-            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <div class="image">
-                    <%--                    <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">--%>
-                </div>
-                <div class="info">
-                    <a href="#" class="d-block">Xin chào <%=oauth2Security.getUsername()%></a>
+            <div class="user-panel mt-3 pb-3 mb-3">
+                <div class="d-flex flex-column">
+                    <div class="p-2">
+                        <a href="#" class="d-block">Xin chào <%=oauth2Security.getUsername()%></a>
+                    </div>
+                    <div class="p-2">
+                        <a href="/sso/logout" class="d-block">Đăng xuất</a>
+                    </div>
                 </div>
             </div>
             <!-- Sidebar Menu -->
@@ -118,7 +120,7 @@
                 </div>
             <%}%>
             <div class="container-fluid">
-                <form action="/admin/industry/create" method="POST">
+                <form action="/admin/corp-industry/create" method="POST">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">

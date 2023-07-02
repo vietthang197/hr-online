@@ -52,12 +52,14 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <!-- Sidebar user panel (optional) -->
-            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <div class="image">
-                    <%--                    <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">--%>
-                </div>
-                <div class="info">
-                    <a href="#" class="d-block">Xin chào <%=oauth2Security.getUsername()%></a>
+            <div class="user-panel mt-3 pb-3 mb-3">
+                <div class="d-flex flex-column">
+                    <div class="p-2">
+                        <a href="#" class="d-block">Xin chào <%=oauth2Security.getUsername()%></a>
+                    </div>
+                    <div class="p-2">
+                        <a href="/sso/logout" class="d-block">Đăng xuất</a>
+                    </div>
                 </div>
             </div>
             <!-- Sidebar Menu -->
@@ -124,6 +126,9 @@
                                     <tr>
                                         <th></th>
                                         <th>ID</th>
+                                        <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:edit")) { %>
+                                            <th>Sửa</th>
+                                        <%}%>
                                         <th>Tên ngành nghề</th>
                                         <th>Ngày tạo</th>
                                         <th>Người tạo</th>
@@ -173,6 +178,140 @@
 <jsp:include page="../common/importDataTableJs.jsp"/>
 <!-- Data table -->
 
-<script src="/resources/js/industryList.js"></script>
+<script>
+    $(document).ready(function () {
+
+        const objectSearch = {
+            name: null
+        }
+
+        const dataTable = $('#dataTable').DataTable({
+            columnDefs: [
+                {
+                    orderable: false,
+                    className: 'select-checkbox',
+                    targets: 0
+                },
+                {
+                    targets: 1,
+                    visible: false,
+                    searchable: false,
+                }
+            ],
+            select: {
+                style: 'multi',
+                selector: 'td:first-child'
+            },
+            pagingType: "full_numbers",
+            lengthMenu: [
+                [10, 25, 50],
+                [10, 25, 50]
+            ],
+            searching: false,
+            ordering: false,
+            info: true,
+            responsive: true,
+            processing: false,
+            serverSide: true,
+            "columns": [
+                {"data": ""},
+                {"data": "id", "render": $.fn.dataTable.render.text()},
+                <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:edit")) { %>
+                {"data": "edit"},
+                <%}%>
+                {"data": "name", "render": $.fn.dataTable.render.text()},
+                {"data": "createdDate", "render": $.fn.dataTable.render.text()},
+                {"data": "createdBy", "render": $.fn.dataTable.render.text()},
+                {"data": "updatedDate", "render": $.fn.dataTable.render.text()},
+                {"data": "updatedBy", "render": $.fn.dataTable.render.text()}
+            ],
+            ajax: {
+                url: "/admin/corp-industry/search",
+                method: "POST",
+                contentType: "application/json",
+                data: function (data) {
+                    return JSON.stringify({
+                        draw: data.draw,
+                        start: Math.round(data.start / data.length),
+                        length: data.length,
+                        ...objectSearch
+                    })
+                },
+                dataFilter: function (response) {
+                    let responseJson = JSON.parse(response).data;
+                    let dataRes = {
+                        "draw": responseJson.draw,
+                        "recordsFiltered": responseJson.recordsTotal,
+                        "recordsTotal": responseJson.recordsTotal,
+                        "data": []
+                    };
+
+                    for (let i = 0; i < responseJson.data.length; i++) {
+                        dataRes.data.push({
+                            "": "",
+                            "id": responseJson.data[i].id,
+                            <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:edit")) { %>
+                                "edit": '<a href="/admin/corp-industry/edit/' + responseJson.data[i].id  +'" role="button" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>',
+                            <%}%>
+                            "name": responseJson.data[i].name,
+                            "createdDate": responseJson.data[i].createdDate,
+                            "createdBy": responseJson.data[i].createdBy,
+                            "updatedDate": responseJson.data[i].updatedDate,
+                            "updatedBy": responseJson.data[i].updatedBy
+                        })
+                    }
+
+                    return JSON.stringify(dataRes);
+                }
+            }
+        });
+
+        $('#btnSearchDataTable').click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            objectSearch.name = $('#s_name').val() == '' ? null : $('#s_name').val();
+            dataTable.search({...objectSearch}).draw()
+        })
+
+        $('#btnClearFormSearch').click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $('#s_name').val('');
+            objectSearch.name = null;
+            dataTable.search({...objectSearch}).draw()
+        });
+
+        <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:delete")) { %>
+            $('#deleteMultiRowDataTable').click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                const counter = dataTable.rows({ selected: true }).count();
+                if (counter == 0) {
+                    alert('Bạn phải chọn các bản ghi trước khi xoá!');
+                    return;
+                }
+
+                const chooser = confirm('Bạn có muốn xoá các bản ghi được chọn?');
+                if (chooser) {
+                    const ids = dataTable.rows({ selected: true }).data().map(item => item.id).toArray();
+                    if (ids) {
+                        $.ajax({
+                            url: '/admin/corp-industry/delete',
+                            method: 'DELETE',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                ids: ids
+                            }),
+                            complete: function () {
+                                location.reload()
+                            }
+                        })
+                    }
+                }
+            })
+        <%}%>
+    });
+</script>
 </body>
 </html>
