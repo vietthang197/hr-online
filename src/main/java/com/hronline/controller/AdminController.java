@@ -110,7 +110,8 @@ public class AdminController {
 
     @GetMapping("/corp-industry/edit/{id}")
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp Industry Resource', 'urn:servlet-authz:protected:admin:industry:edit')")
-    public String corpIndustryEdit(HttpServletRequest request, @PathVariable String id) {
+    public String corpIndustryEdit(HttpServletRequest request, @PathVariable String id, Model model) {
+        model.addAttribute("corpIndustryId", id);
         return "admin/industry/industryEdit";
     }
 }
