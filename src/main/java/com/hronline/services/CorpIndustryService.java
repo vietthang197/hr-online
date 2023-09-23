@@ -5,10 +5,10 @@ import com.hronline.dto.CorpIndustryDto;
 import com.hronline.dto.PaginationDto;
 import com.hronline.entity.CorpIndustry;
 import com.hronline.exception.BindingResultException;
-import com.hronline.vm.CorpIndustrySearchVM;
-import com.hronline.vm.CreateIndustryVM;
+import com.hronline.vm.industry.CorpIndustrySearchVM;
+import com.hronline.vm.industry.CreateIndustryVM;
 import com.hronline.vm.DeleteEntityVM;
-import com.hronline.vm.UpdateCorpIndustryVM;
+import com.hronline.vm.industry.UpdateCorpIndustryVM;
 
 import java.util.Optional;
 

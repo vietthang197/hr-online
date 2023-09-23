@@ -11,11 +11,7 @@ import java.io.Serializable;
 @Getter
 @Builder
 @ToString
-public class CorpIndustryDto implements Serializable {
+public class JobLocationDto implements Serializable {
     private String id;
     private String name;
-    private String createdBy;
-    private String createdDate;
-    private String modifyBy;
-    private String modifyDate;
 }

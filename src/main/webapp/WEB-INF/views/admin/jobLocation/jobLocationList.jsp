@@ -15,7 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="_csrf" content="${_csrf.token}" />
     <meta name="_csrf_header" content="${_csrf.headerName}" />
-    <title>Danh sách ngành nghề</title>
+    <title>Danh sách địa chỉ làm việc</title>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="/resources/adminlte/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
@@ -76,12 +76,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Danh sách ngành nghề</h1>
+                        <h1 class="m-0">Danh sách địa chỉ làm việc</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
-                            <li class="breadcrumb-item active">Danh sách ngành nghề</li>
+                            <li class="breadcrumb-item active">>Danh sách địa chỉ làm việc</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -99,7 +99,7 @@
                                 <form id="formSearch" class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label for="s_name">Tên ngành nghề</label>
+                                            <label for="s_name">Địa chỉ</label>
                                             <input type="text" class="form-control" id="s_name" name="name" placeholder="name">
                                         </div>
                                     </div>
@@ -116,7 +116,7 @@
                             <div class="card-body card-wrap-data-table">
                                 <div class="row mb-4">
                                     <div class="col-md-12">
-                                        <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:delete")) { %>
+                                        <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:job-location:delete")) { %>
                                         <button class="btn btn-danger btn-sm" id="deleteMultiRowDataTable"><i class="fas fa-trash"></i> Xoá bản ghi</button>
                                         <% } %>
                                     </div>
@@ -126,10 +126,10 @@
                                     <tr>
                                         <th></th>
                                         <th>ID</th>
-                                        <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:edit")) { %>
+                                        <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:job-location:edit")) { %>
                                             <th>Sửa</th>
                                         <%}%>
-                                        <th>Tên ngành nghề</th>
+                                        <th>Địa chỉ</th>
                                         <th>Ngày tạo</th>
                                         <th>Người tạo</th>
                                         <th>Ngày sửa</th>
@@ -216,7 +216,7 @@
             "columns": [
                 {"data": ""},
                 {"data": "id", "render": $.fn.dataTable.render.text()},
-                <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:edit")) { %>
+                <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:job-location:edit")) { %>
                 {"data": "edit"},
                 <%}%>
                 {"data": "name", "render": $.fn.dataTable.render.text()},
@@ -250,7 +250,7 @@
                         dataRes.data.push({
                             "": "",
                             "id": responseJson.data[i].id,
-                            <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:edit")) { %>
+                            <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:job-location:edit")) { %>
                                 "edit": '<a href="/admin/corp-industry/edit/' + responseJson.data[i].id  +'" role="button" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>',
                             <%}%>
                             "name": responseJson.data[i].name,
@@ -281,7 +281,7 @@
             dataTable.search({...objectSearch}).draw()
         });
 
-        <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:delete")) { %>
+        <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:job-location:delete")) { %>
             $('#deleteMultiRowDataTable').click(function (e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -297,14 +297,14 @@
                     const ids = dataTable.rows({ selected: true }).data().map(item => item.id).toArray();
                     if (ids) {
                         $.ajax({
-                            url: '/admin/corp-industry/delete',
+                            url: '/admin/job-location/delete',
                             method: 'DELETE',
                             contentType: 'application/json',
                             data: JSON.stringify({
                                 ids: ids
                             }),
                             complete: function () {
-                                location.reload()
+                                jobLocation.reload()
                             }
                         })
                     }

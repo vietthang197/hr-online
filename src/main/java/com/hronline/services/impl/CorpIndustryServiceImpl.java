@@ -9,11 +9,10 @@ import com.hronline.mapper.CorpIndustryMapper;
 import com.hronline.repository.CorpIndustryRepository;
 import com.hronline.services.CommonSearchService;
 import com.hronline.services.CorpIndustryService;
-import com.hronline.vm.CorpIndustrySearchVM;
-import com.hronline.vm.CreateIndustryVM;
+import com.hronline.vm.industry.CorpIndustrySearchVM;
+import com.hronline.vm.industry.CreateIndustryVM;
 import com.hronline.vm.DeleteEntityVM;
-import com.hronline.vm.UpdateCorpIndustryVM;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.hronline.vm.industry.UpdateCorpIndustryVM;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

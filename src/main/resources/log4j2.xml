@@ -16,14 +16,10 @@
 		</RollingFile>
 	</Appenders>
 	<Loggers>
-		<Root level="error">
+		<Root level="info">
 			<AppenderRef ref="api"/>
 			<AppenderRef ref="Console"/>
 		</Root>
-		<Logger name="com.hronline" level="info" additivity="false">
-			<AppenderRef ref="api"/>
-			<AppenderRef ref="Console"/>
-		</Logger>
 
 	</Loggers>
 </Configuration>

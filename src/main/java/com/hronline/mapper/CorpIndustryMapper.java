@@ -6,6 +6,7 @@ import com.hronline.entity.CorpIndustry;
 import com.hronline.util.DateUtils;
 import org.mapstruct.Mapper;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -24,7 +25,10 @@ public interface CorpIndustryMapper {
         if ( corpIndustry.getCreatedDate() != null ) {
             corpIndustryDto.createdDate(DateUtils.fromDate(corpIndustry.getCreatedDate(), DateUtils.DEFAULT_DATE_FORMAT));
         }
-
+        corpIndustryDto.modifyBy(corpIndustry.getModifyBy());
+        if (corpIndustry.getModifyDate() != null) {
+            corpIndustryDto.modifyDate(DateUtils.fromDate(corpIndustry.getModifyDate(), DateUtils.DEFAULT_DATE_FORMAT));
+        }
         return corpIndustryDto.build();
     }
 

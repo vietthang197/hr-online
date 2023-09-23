@@ -94,3 +94,18 @@
         </div>
     </div>
 </footer>
+<script>
+    const userMenu = document.getElementById("user-menu");
+    const userDropdown = document.getElementById("user-dropdown");
+
+    userMenu.addEventListener("click", () => {
+        userDropdown.classList.toggle("hidden");
+    });
+
+    // Đóng dropdown khi người dùng click bất kỳ nơi nào trên trang
+    document.addEventListener("click", (event) => {
+        if (!userMenu.contains(event.target)) {
+            userDropdown.classList.add("hidden");
+        }
+    });
+</script>

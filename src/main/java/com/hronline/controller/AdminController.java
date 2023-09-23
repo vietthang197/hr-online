@@ -1,28 +1,24 @@
 package com.hronline.controller;
 
-import com.hronline.config.Oauth2Security;
 import com.hronline.dto.BasicResponseDto;
 import com.hronline.dto.CorpIndustryDto;
 import com.hronline.dto.PaginationDto;
 import com.hronline.entity.CorpIndustry;
 import com.hronline.exception.BindingResultException;
 import com.hronline.services.CorpIndustryService;
+import com.hronline.services.JobLocationService;
 import com.hronline.util.HrConstant;
-import com.hronline.vm.CorpIndustrySearchVM;
-import com.hronline.vm.CreateIndustryVM;
+import com.hronline.vm.industry.CorpIndustrySearchVM;
+import com.hronline.vm.industry.CreateIndustryVM;
 import com.hronline.vm.DeleteEntityVM;
-import com.hronline.vm.UpdateCorpIndustryVM;
+import com.hronline.vm.industry.UpdateCorpIndustryVM;
+import com.hronline.vm.location.CreateJobLocationVM;
 import org.apache.http.HttpStatus;
-import org.keycloak.KeycloakPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.CollectionUtils;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -31,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
-import java.security.Principal;
 import java.util.Optional;
 
 @Controller
@@ -40,6 +35,9 @@ public class AdminController {
 
     @Autowired
     private CorpIndustryService corpIndustryService;
+
+    @Autowired
+    private JobLocationService jobLocationService;
 
     @GetMapping
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
@@ -142,5 +140,23 @@ public class AdminController {
             return "redirect:/admin/corp-industry/edit/" + updateCorpIndustryVM.getId();
         }
         return "redirect:/admin/corp-industry";
+    }
+
+    @GetMapping("/job-location")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    public String jobLocationList(HttpServletRequest request) {
+        return "admin/jobLocation/jobLocationList";
+    }
+
+    @PostMapping("/job-location/create")
+    @PreAuthorize("@oauth2Security.hasMultipleResourcePermission(#request, T(java.util.Arrays).asList(new com.hronline.obj.AuthzRequest('Admin Resource', T(java.util.Arrays).asList('urn:servlet-authz:protected:admin:access')), new com.hronline.obj.AuthzRequest('Corp Location Resource', T(java.util.Arrays).asList('urn:servlet-authz:protected:admin:job-location:create'))))")
+    public String createLocationSubmit(HttpServletRequest request, @Valid @ModelAttribute CreateJobLocationVM createJobLocationVM, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_ERROR_LIST, bindingResult.getAllErrors());
+            return "redirect:/admin/job-location/create";
+        }
+        jobLocationService.save(createJobLocationVM);
+        redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE, "Thêm mới địa chỉ thành công");
+        return "redirect:/admin/job-location/create";
     }
 }

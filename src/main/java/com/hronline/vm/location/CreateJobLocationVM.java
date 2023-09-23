@@ -1,4 +1,4 @@
-package com.hronline.vm;
+package com.hronline.vm.location;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,9 +13,9 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class CreateIndustryVM implements Serializable {
+public class CreateJobLocationVM implements Serializable {
     // Tên ngành nghề hoạt động
-    @NotBlank(message = "Tên ngành nghề không được trống")
-    @Size(max = 100, message = "Tên ngành nghề không quá 100 ký tự")
+    @NotBlank(message = "Địa chỉ được trống")
+    @Size(max = 100, message = "Địa chỉ không quá 100 ký tự")
     private String name;
 }

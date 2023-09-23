@@ -1,8 +1,9 @@
-package com.hronline.vm;
+package com.hronline.vm.industry;
 
 import com.hronline.annotation.SearchColumn;
 import com.hronline.obj.DataType;
 import com.hronline.obj.SearchType;
+import com.hronline.vm.BaseObjPagination;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
