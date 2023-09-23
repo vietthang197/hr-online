@@ -2,6 +2,7 @@ package com.hronline.controller;
 
 import com.hronline.dto.BasicResponseDto;
 import com.hronline.dto.CorpIndustryDto;
+import com.hronline.dto.JobLocationDto;
 import com.hronline.dto.PaginationDto;
 import com.hronline.entity.CorpIndustry;
 import com.hronline.exception.BindingResultException;
@@ -13,6 +14,7 @@ import com.hronline.vm.industry.CreateIndustryVM;
 import com.hronline.vm.DeleteEntityVM;
 import com.hronline.vm.industry.UpdateCorpIndustryVM;
 import com.hronline.vm.location.CreateJobLocationVM;
+import com.hronline.vm.location.JobLocationSearchVM;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -148,6 +150,12 @@ public class AdminController {
         return "admin/jobLocation/jobLocationList";
     }
 
+    @GetMapping("/job-location/create")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    public String createJobLocation(HttpServletRequest request) {
+        return "admin/jobLocation/createJobLocation";
+    }
+
     @PostMapping("/job-location/create")
     @PreAuthorize("@oauth2Security.hasMultipleResourcePermission(#request, T(java.util.Arrays).asList(new com.hronline.obj.AuthzRequest('Admin Resource', T(java.util.Arrays).asList('urn:servlet-authz:protected:admin:access')), new com.hronline.obj.AuthzRequest('Corp Location Resource', T(java.util.Arrays).asList('urn:servlet-authz:protected:admin:job-location:create'))))")
     public String createLocationSubmit(HttpServletRequest request, @Valid @ModelAttribute CreateJobLocationVM createJobLocationVM, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
@@ -158,5 +166,12 @@ public class AdminController {
         jobLocationService.save(createJobLocationVM);
         redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE, "Thêm mới địa chỉ thành công");
         return "redirect:/admin/job-location/create";
+    }
+
+    @PostMapping("/job-location/search")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    @ResponseBody
+    public BasicResponseDto<PaginationDto<JobLocationDto>> searchJobLocation(HttpServletRequest request, @Valid @RequestBody JobLocationSearchVM searchVM) {
+        return jobLocationService.search(searchVM);
     }
 }

@@ -17,7 +17,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Thêm mới ngành nghề</title>
+    <title>Thêm mới địa chỉ làm việc</title>
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="/resources/adminlte/plugins/fontawesome-free/css/all.min.css">
@@ -75,12 +75,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Thêm mới ngành nghề</h1>
+                        <h1 class="m-0">Thêm mới địa chỉ làm việc</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
-                            <li class="breadcrumb-item active">Thêm mới ngành nghề</li>
+                            <li class="breadcrumb-item active">Thêm mới địa chỉ làm việc</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -120,16 +120,16 @@
                 </div>
             <%}%>
             <div class="container-fluid">
-                <form action="/admin/corp-industry/create" method="POST">
+                <form action="/admin/job-location/create" method="POST">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="corpName">Tên ngành nghề <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="corpName"  name="name" placeholder="Công ty A..." required>
+                                <label for="name">Địa chỉ <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name"  name="name" placeholder="Hà Nội, Singapore" required>
                             </div>
                         </div>
                     </div>
-                    <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:create")) { %>
+                    <% if (oauth2Security.hasResourcePermission(request, "Corp Location Resource", "urn:servlet-authz:protected:admin:job-location:create")) { %>
                         <button type="submit" class="btn btn-primary btn-sm">Thêm</button>
                     <%}%>
                 </form>

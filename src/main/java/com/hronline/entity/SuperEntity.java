@@ -26,18 +26,18 @@ import java.time.LocalDateTime;
 public class SuperEntity {
 
     @Column(name = "create_by", length = 100)
-    private String createdBy;
+    protected String createdBy;
 
     @Column(name = "create_date")
     @GenericField(sortable = Sortable.YES)
-    private LocalDateTime createdDate;
+    protected LocalDateTime createdDate;
 
     @Column(name = "modify_by", length = 100)
-    private String modifyBy;
+    protected String modifyBy;
 
     @Column(name = "modify_date")
     @GenericField(sortable = Sortable.YES)
-    private LocalDateTime modifyDate;
+    protected LocalDateTime modifyDate;
 
     @PrePersist
     protected void onCreate() {

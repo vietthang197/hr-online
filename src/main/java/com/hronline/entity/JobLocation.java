@@ -16,7 +16,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "location")
+@Table(name = "job_location")
 @Indexed
 @ToString
 public class JobLocation extends SuperEntity implements Serializable {

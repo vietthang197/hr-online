@@ -124,8 +124,8 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="corpName">Tên ngành nghề <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="corpName"  name="name" placeholder="Công ty A..." required>
+                                <label for="name">Tên ngành nghề <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name"  name="name" placeholder="Công ty A..." required>
                             </div>
                         </div>
                     </div>

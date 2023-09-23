@@ -112,9 +112,9 @@
                         <p>Danh sách địa chỉ</p>
                     </a>
                 </li>
-                <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:create")) {%>
+                <% if (oauth2Security.hasResourcePermission(request, "Corp Location Resource", "urn:servlet-authz:protected:admin:job-location:create")) {%>
                 <li class="nav-item">
-                    <a href="/admin/corp-industry/create" class="nav-link <% if ("/admin/corp-industry/create".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">
+                    <a href="/admin/job-location/create" class="nav-link <% if ("/admin/job-location/create".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Thêm mới địa chỉ</p>
                     </a>

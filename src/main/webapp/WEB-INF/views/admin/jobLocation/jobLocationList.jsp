@@ -81,7 +81,7 @@
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
-                            <li class="breadcrumb-item active">>Danh sách địa chỉ làm việc</li>
+                            <li class="breadcrumb-item active">Danh sách địa chỉ làm việc</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -116,7 +116,7 @@
                             <div class="card-body card-wrap-data-table">
                                 <div class="row mb-4">
                                     <div class="col-md-12">
-                                        <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:job-location:delete")) { %>
+                                        <% if (oauth2Security.hasResourcePermission(request, "Corp Location Resource", "urn:servlet-authz:protected:admin:job-location:delete")) { %>
                                         <button class="btn btn-danger btn-sm" id="deleteMultiRowDataTable"><i class="fas fa-trash"></i> Xoá bản ghi</button>
                                         <% } %>
                                     </div>
@@ -126,7 +126,7 @@
                                     <tr>
                                         <th></th>
                                         <th>ID</th>
-                                        <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:job-location:edit")) { %>
+                                        <% if (oauth2Security.hasResourcePermission(request, "Corp Location Resource", "urn:servlet-authz:protected:admin:job-location:edit")) { %>
                                             <th>Sửa</th>
                                         <%}%>
                                         <th>Địa chỉ</th>
@@ -216,7 +216,7 @@
             "columns": [
                 {"data": ""},
                 {"data": "id", "render": $.fn.dataTable.render.text()},
-                <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:job-location:edit")) { %>
+                <% if (oauth2Security.hasResourcePermission(request, "Corp Location Resource", "urn:servlet-authz:protected:admin:job-location:edit")) { %>
                 {"data": "edit"},
                 <%}%>
                 {"data": "name", "render": $.fn.dataTable.render.text()},
@@ -226,7 +226,7 @@
                 {"data": "modifyBy", "render": $.fn.dataTable.render.text()}
             ],
             ajax: {
-                url: "/admin/corp-industry/search",
+                url: "/admin/job-location/search",
                 method: "POST",
                 contentType: "application/json",
                 data: function (data) {
@@ -250,8 +250,8 @@
                         dataRes.data.push({
                             "": "",
                             "id": responseJson.data[i].id,
-                            <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:job-location:edit")) { %>
-                                "edit": '<a href="/admin/corp-industry/edit/' + responseJson.data[i].id  +'" role="button" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>',
+                            <% if (oauth2Security.hasResourcePermission(request, "Corp Location Resource", "urn:servlet-authz:protected:admin:job-location:edit")) { %>
+                                "edit": '<a href="/admin/job-location/edit/' + responseJson.data[i].id  +'" role="button" class="btn btn-sm btn-primary"><i class="fas fa-edit"></i></a>',
                             <%}%>
                             "name": responseJson.data[i].name,
                             "createdDate": responseJson.data[i].createdDate,
@@ -281,7 +281,7 @@
             dataTable.search({...objectSearch}).draw()
         });
 
-        <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:job-location:delete")) { %>
+        <% if (oauth2Security.hasResourcePermission(request, "Corp Location Resource", "urn:servlet-authz:protected:admin:job-location:delete")) { %>
             $('#deleteMultiRowDataTable').click(function (e) {
                 e.preventDefault();
                 e.stopPropagation();

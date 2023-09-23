@@ -3,60 +3,15 @@ package com.hronline.mapper;
 import com.hronline.dto.CorpIndustryDto;
 import com.hronline.dto.PaginationDto;
 import com.hronline.entity.CorpIndustry;
-import com.hronline.util.DateUtils;
 import org.mapstruct.Mapper;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface CorpIndustryMapper {
 
-    default CorpIndustryDto toDto(CorpIndustry corpIndustry) {
-        if ( corpIndustry == null ) {
-            return null;
-        }
+    @Mapping(source = "createdDate", target = "createdDate", dateFormat = "dd/MM/yyyy HH:mm:ss")
+    @Mapping(source = "modifyDate", target = "modifyDate", dateFormat = "dd/MM/yyyy HH:mm:ss")
+    CorpIndustryDto toDto(CorpIndustry corpIndustry);
 
-        CorpIndustryDto.CorpIndustryDtoBuilder corpIndustryDto = CorpIndustryDto.builder();
-
-        corpIndustryDto.id( corpIndustry.getId() );
-        corpIndustryDto.name( corpIndustry.getName() );
-        corpIndustryDto.createdBy( corpIndustry.getCreatedBy() );
-        if ( corpIndustry.getCreatedDate() != null ) {
-            corpIndustryDto.createdDate(DateUtils.fromDate(corpIndustry.getCreatedDate(), DateUtils.DEFAULT_DATE_FORMAT));
-        }
-        corpIndustryDto.modifyBy(corpIndustry.getModifyBy());
-        if (corpIndustry.getModifyDate() != null) {
-            corpIndustryDto.modifyDate(DateUtils.fromDate(corpIndustry.getModifyDate(), DateUtils.DEFAULT_DATE_FORMAT));
-        }
-        return corpIndustryDto.build();
-    }
-
-    default PaginationDto<CorpIndustryDto> toPaginationDto(PaginationDto<CorpIndustry> industryPagination) {
-        if ( industryPagination == null ) {
-            return null;
-        }
-
-        PaginationDto<CorpIndustryDto> paginationDto = new PaginationDto<CorpIndustryDto>();
-
-        paginationDto.setRecordsFiltered( industryPagination.getRecordsFiltered() );
-        paginationDto.setDraw( industryPagination.getDraw() );
-        paginationDto.setRecordsTotal( industryPagination.getRecordsTotal() );
-        paginationDto.setData( corpIndustryListToCorpIndustryDtoList( industryPagination.getData() ) );
-
-        return paginationDto;
-    }
-
-    default List<CorpIndustryDto> corpIndustryListToCorpIndustryDtoList(List<CorpIndustry> list) {
-        if ( list == null ) {
-            return null;
-        }
-
-        List<CorpIndustryDto> list1 = new ArrayList<CorpIndustryDto>( list.size() );
-        for ( CorpIndustry corpIndustry : list ) {
-            list1.add( toDto( corpIndustry ) );
-        }
-
-        return list1;
-    }
+    PaginationDto<CorpIndustryDto> toPaginationDto(PaginationDto<CorpIndustry> corpIndustryPagination);
 }
