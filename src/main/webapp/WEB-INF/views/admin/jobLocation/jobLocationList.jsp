@@ -304,7 +304,7 @@
                                 ids: ids
                             }),
                             complete: function () {
-                                jobLocation.reload()
+                                location.reload()
                             }
                         })
                     }

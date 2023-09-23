@@ -5,6 +5,7 @@ import com.hronline.dto.CorpIndustryDto;
 import com.hronline.dto.JobLocationDto;
 import com.hronline.dto.PaginationDto;
 import com.hronline.entity.CorpIndustry;
+import com.hronline.entity.JobLocation;
 import com.hronline.exception.BindingResultException;
 import com.hronline.services.CorpIndustryService;
 import com.hronline.services.JobLocationService;
@@ -15,6 +16,7 @@ import com.hronline.vm.DeleteEntityVM;
 import com.hronline.vm.industry.UpdateCorpIndustryVM;
 import com.hronline.vm.location.CreateJobLocationVM;
 import com.hronline.vm.location.JobLocationSearchVM;
+import com.hronline.vm.location.UpdateJobLocationVM;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -173,5 +175,41 @@ public class AdminController {
     @ResponseBody
     public BasicResponseDto<PaginationDto<JobLocationDto>> searchJobLocation(HttpServletRequest request, @Valid @RequestBody JobLocationSearchVM searchVM) {
         return jobLocationService.search(searchVM);
+    }
+
+    @GetMapping("/job-location/edit/{id}")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp Location Resource', 'urn:servlet-authz:protected:admin:job-location:edit')")
+    public String jobLocationEdit(HttpServletRequest request, HttpServletResponse response, @Valid @NotBlank @PathVariable String id, Model model) throws IOException {
+        Optional<JobLocation> jobLocationOptional = jobLocationService.findById(id);
+        if (jobLocationOptional.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            model.addAttribute("jobLocationName", jobLocationOptional.get().getName());
+        }
+        model.addAttribute("jobLocationId", id);
+        return "admin/jobLocation/jobLocationEdit";
+    }
+
+    @PostMapping("/job-location/edit")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp Location Resource', 'urn:servlet-authz:protected:admin:job-location:edit')")
+    public String jobLocationEdit(HttpServletRequest request, @Valid @ModelAttribute UpdateJobLocationVM updateJobLocationVM, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_ERROR_LIST, bindingResult.getAllErrors());
+            return "redirect:/admin/job-location/edit/" + updateJobLocationVM.getId();
+        }
+        try {
+            jobLocationService.update(updateJobLocationVM);
+        } catch (BindingResultException e) {
+            bindingResult.reject(String.valueOf(HttpStatus.SC_BAD_REQUEST), e.getMessage());
+            return "redirect:/admin/job-location/edit/" + updateJobLocationVM.getId();
+        }
+        return "redirect:/admin/job-location";
+    }
+
+    @DeleteMapping("/job-location/delete")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp Location Resource', 'urn:servlet-authz:protected:admin:job-location:delete')")
+    @ResponseBody
+    public BasicResponseDto<Void> deleteJobLocation(HttpServletRequest request, @Valid @RequestBody DeleteEntityVM deleteEntityVM) {
+        return jobLocationService.delete(deleteEntityVM);
     }
 }
