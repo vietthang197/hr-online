@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Getter
 @Builder
 @ToString
-public class CorpIndustryDto implements Serializable {
+public class IndustryDto implements Serializable {
     private String id;
     private String name;
     private String createdBy;

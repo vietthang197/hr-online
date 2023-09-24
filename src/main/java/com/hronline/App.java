@@ -1,6 +1,6 @@
 package com.hronline;
 
-import com.hronline.entity.CorpIndustry;
+import com.hronline.entity.Industry;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.massindexing.MassIndexer;
 import org.hibernate.search.mapper.orm.session.SearchSession;
@@ -39,7 +39,7 @@ public class App extends SpringBootServletInitializer implements CommandLineRunn
             entityManager = entityManagerFactory.createEntityManager();
             SearchSession searchSession = Search.session( entityManager );
 
-            MassIndexer indexer = searchSession.massIndexer( CorpIndustry.class )
+            MassIndexer indexer = searchSession.massIndexer( Industry.class )
                     .threadsToLoadObjects( 7 );
 
             indexer.startAndWait();

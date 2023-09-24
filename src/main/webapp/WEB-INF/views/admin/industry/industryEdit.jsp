@@ -125,12 +125,12 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="corpName">Tên ngành nghề <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="corpName"  name="name" placeholder="Công ty A..." value="<%=(String) request.getAttribute("corpIndustryName")%>" required>
+                                <input type="text" class="form-control" id="corpName"  name="name" placeholder="Công ty A..." value="<%=(String) request.getAttribute("name")%>" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <input type="hidden" class="form-control" id="id" name="id" value="<%=(String)request.getAttribute("corpIndustryId")%>" required>
+                                <input type="hidden" class="form-control" id="id" name="id" value="<%=(String)request.getAttribute("id")%>" required>
                             </div>
                         </div>
                     </div>

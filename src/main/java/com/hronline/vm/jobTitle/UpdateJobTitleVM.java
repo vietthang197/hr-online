@@ -1,4 +1,4 @@
-package com.hronline.vm.industry;
+package com.hronline.vm.jobTitle;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,13 +9,13 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
-public class UpdateCorpIndustryVM implements Serializable {
+public class UpdateJobTitleVM implements Serializable {
 
     @NotBlank(message = "Id không được trống")
     @Size(max = 100, message = "Id không quá 100 ký tự")
     private String id;
 
-    @NotBlank(message = "Tên ngành nghề không được trống")
-    @Size(max = 100, message = "Tên ngành nghề không quá 100 ký tự")
+    @NotBlank(message = "Tên chức vụ không được trống")
+    @Size(max = 100, message = "Tên chức vụ không quá 100 ký tự")
     private String name;
 }

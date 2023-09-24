@@ -11,7 +11,7 @@
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <li class="nav-item menu-open">
             <a href="#" class="nav-link">
-                <i class="fas fa-briefcase"></i>
+                <i class="fas fa-tasks"></i>
                 <p>
                     Job
                     <i class="right fas fa-angle-left"></i>
@@ -74,7 +74,7 @@
         </li>
         <li class="nav-item menu-open">
             <a href="#" class="nav-link">
-                <i class="fas fa-building"></i>
+                <i class="fas fa-industry"></i>
                 <p>
                     Ngành nghề công ty
                     <i class="fas fa-angle-left right"></i>
@@ -117,6 +117,31 @@
                     <a href="/admin/job-location/create" class="nav-link <% if ("/admin/job-location/create".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">
                         <i class="far fa-circle nav-icon"></i>
                         <p>Thêm mới địa chỉ</p>
+                    </a>
+                </li>
+                <%}%>
+            </ul>
+        </li>
+        <li class="nav-item menu-open">
+            <a href="#" class="nav-link">
+                <i class="fas fa-briefcase"></i>
+                <p>
+                    Chức vụ công việc
+                    <i class="fas fa-angle-left right"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="/admin/job-title" class="nav-link <% if ("/admin/job-title".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Danh sách chức vụ</p>
+                    </a>
+                </li>
+                <% if (oauth2Security.hasResourcePermission(request, "Corp JobTitle Resource", "urn:servlet-authz:protected:admin:job-title:create")) {%>
+                <li class="nav-item">
+                    <a href="/admin/job-title/create" class="nav-link <% if ("/admin/job-title/create".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Thêm mới chức vụ</p>
                     </a>
                 </li>
                 <%}%>

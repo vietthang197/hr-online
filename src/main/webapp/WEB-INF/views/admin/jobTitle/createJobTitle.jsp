@@ -17,7 +17,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Chỉnh sửa địa chỉ làm việc</title>
+    <title>Thêm mới địa chỉ làm việc</title>
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="/resources/adminlte/plugins/fontawesome-free/css/all.min.css">
@@ -75,12 +75,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Sửa địa chỉ làm việc</h1>
+                        <h1 class="m-0">Thêm mới địa chỉ làm việc</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
-                            <li class="breadcrumb-item active">Sửa địa chỉ làm việc</li>
+                            <li class="breadcrumb-item active">Thêm mới chức vụ</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -92,50 +92,45 @@
         <div class="content">
             <% String successMessage = (String) request.getAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE); %>
             <% if (successMessage != null) {%>
-            <div class="row alert-msg">
-                <div class="col-md-6">
-                    <ul class="list-group mb-2">
-                        <li class="list-group-item list-group-item-success">
-                            <%=successMessage%>
-                        </li>
-                    </ul>
+                <div class="row alert-msg">
+                    <div class="col-md-6">
+                        <ul class="list-group mb-2">
+                            <li class="list-group-item list-group-item-success">
+                                <%=successMessage%>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
             <%}%>
             <% List<ObjectError> errorList = (List<ObjectError>) request.getAttribute(HrConstant.ATTRIBUTE_ERROR_LIST); %>
             <% if (!CollectionUtils.isEmpty(errorList)) {%>
-            <div class="row alert-msg">
-                <div class="col-md-6">
-                    <ul class="list-group mb-2">
-                        <%
-                            for (ObjectError error : errorList) {
-                        %>
-                        <li class="list-group-item list-group-item-danger">
-                            <%=error.getDefaultMessage()%>
-                        </li>
+                <div class="row alert-msg">
+                    <div class="col-md-6">
+                            <ul class="list-group mb-2">
+                                <%
+                                    for (ObjectError error : errorList) {
+                                %>
+                                <li class="list-group-item list-group-item-danger">
+                                    <%=error.getDefaultMessage()%>
+                                </li>
 
-                    </ul>
-                    <%}%>
+                            </ul>
+                        <%}%>
+                    </div>
                 </div>
-            </div>
             <%}%>
             <div class="container-fluid">
-                <form action="/admin/job-location/edit" method="POST">
+                <form action="/admin/job-title/create" method="POST">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="name">Địa chỉ <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="name"  name="name" placeholder="Công ty A..." value="<%=(String) request.getAttribute("name")%>" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <input type="hidden" class="form-control" id="id" name="id" value="<%=(String)request.getAttribute("id")%>" required>
+                                <input type="text" class="form-control" id="name"  name="name" placeholder="Lập trình viên" required>
                             </div>
                         </div>
                     </div>
-                    <% if (oauth2Security.hasResourcePermission(request, "Corp Location Resource", "urn:servlet-authz:protected:admin:job-location:create")) { %>
-                    <button type="submit" class="btn btn-warning btn-sm">Cập nhật</button>
+                    <% if (oauth2Security.hasResourcePermission(request, "Corp JobTitle Resource", "urn:servlet-authz:protected:admin:job-title:create")) { %>
+                        <button type="submit" class="btn btn-primary btn-sm">Thêm</button>
                     <%}%>
                 </form>
                 <!-- /.row -->

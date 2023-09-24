@@ -1,9 +1,9 @@
 package com.hronline.repository;
 
-import com.hronline.entity.CorpIndustry;
+import com.hronline.entity.Industry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CorpIndustryRepository extends JpaRepository<CorpIndustry, String> {
+public interface IndustryRepository extends JpaRepository<Industry, String> {
 }

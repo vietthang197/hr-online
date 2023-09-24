@@ -1,10 +1,8 @@
 package com.hronline.services.impl;
 
 import com.hronline.dto.BasicResponseDto;
-import com.hronline.dto.CorpIndustryDto;
 import com.hronline.dto.JobLocationDto;
 import com.hronline.dto.PaginationDto;
-import com.hronline.entity.CorpIndustry;
 import com.hronline.entity.JobLocation;
 import com.hronline.exception.BindingResultException;
 import com.hronline.mapper.JobLocationMapper;
@@ -12,7 +10,6 @@ import com.hronline.repository.JobLocationRepository;
 import com.hronline.services.CommonSearchService;
 import com.hronline.services.JobLocationService;
 import com.hronline.vm.DeleteEntityVM;
-import com.hronline.vm.industry.CorpIndustrySearchVM;
 import com.hronline.vm.location.CreateJobLocationVM;
 import com.hronline.vm.location.JobLocationSearchVM;
 import com.hronline.vm.location.UpdateJobLocationVM;

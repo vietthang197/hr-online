@@ -1,19 +1,21 @@
 package com.hronline.controller;
 
-import com.hronline.dto.BasicResponseDto;
-import com.hronline.dto.CorpIndustryDto;
-import com.hronline.dto.JobLocationDto;
-import com.hronline.dto.PaginationDto;
-import com.hronline.entity.CorpIndustry;
+import com.hronline.dto.*;
+import com.hronline.entity.Industry;
 import com.hronline.entity.JobLocation;
+import com.hronline.entity.JobTitle;
 import com.hronline.exception.BindingResultException;
-import com.hronline.services.CorpIndustryService;
+import com.hronline.services.IndustryService;
 import com.hronline.services.JobLocationService;
+import com.hronline.services.JobTitleService;
 import com.hronline.util.HrConstant;
-import com.hronline.vm.industry.CorpIndustrySearchVM;
+import com.hronline.vm.industry.IndustrySearchVM;
 import com.hronline.vm.industry.CreateIndustryVM;
 import com.hronline.vm.DeleteEntityVM;
-import com.hronline.vm.industry.UpdateCorpIndustryVM;
+import com.hronline.vm.industry.UpdateIndustryVM;
+import com.hronline.vm.jobTitle.CreateJobTitleVM;
+import com.hronline.vm.jobTitle.JobTitleSearchVM;
+import com.hronline.vm.jobTitle.UpdateJobTitleVM;
 import com.hronline.vm.location.CreateJobLocationVM;
 import com.hronline.vm.location.JobLocationSearchVM;
 import com.hronline.vm.location.UpdateJobLocationVM;
@@ -38,10 +40,13 @@ import java.util.Optional;
 public class AdminController {
 
     @Autowired
-    private CorpIndustryService corpIndustryService;
+    private IndustryService industryService;
 
     @Autowired
     private JobLocationService jobLocationService;
+
+    @Autowired
+    private JobTitleService jobTitleService;
 
     @GetMapping
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
@@ -98,7 +103,7 @@ public class AdminController {
             redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_ERROR_LIST, bindingResult.getAllErrors());
             return "redirect:/admin/corp-industry/create";
         }
-        corpIndustryService.save(createIndustryVM);
+        industryService.save(createIndustryVM);
         redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE, "Thêm mới ngành nghề thành công");
         return "redirect:/admin/corp-industry/create";
     }
@@ -106,42 +111,42 @@ public class AdminController {
     @PostMapping("/corp-industry/search")
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
     @ResponseBody
-    public BasicResponseDto<PaginationDto<CorpIndustryDto>> searchIndustry(HttpServletRequest request, @Valid @RequestBody CorpIndustrySearchVM searchVM) {
-        return corpIndustryService.search(searchVM);
+    public BasicResponseDto<PaginationDto<IndustryDto>> searchIndustry(HttpServletRequest request, @Valid @RequestBody IndustrySearchVM searchVM) {
+        return industryService.search(searchVM);
     }
 
     @DeleteMapping("/corp-industry/delete")
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp Industry Resource', 'urn:servlet-authz:protected:admin:industry:delete')")
     @ResponseBody
     public BasicResponseDto<Void> deleteCorpIndustry(HttpServletRequest request, @Valid @RequestBody DeleteEntityVM deleteEntityVM) {
-        return corpIndustryService.delete(deleteEntityVM);
+        return industryService.delete(deleteEntityVM);
     }
 
     @GetMapping("/corp-industry/edit/{id}")
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp Industry Resource', 'urn:servlet-authz:protected:admin:industry:edit')")
     public String corpIndustryEdit(HttpServletRequest request, HttpServletResponse response, @Valid @NotBlank @PathVariable String id, Model model) throws IOException {
-        Optional<CorpIndustry> corpIndustryOptional = corpIndustryService.findById(id);
+        Optional<Industry> corpIndustryOptional = industryService.findById(id);
         if (corpIndustryOptional.isEmpty()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         } else {
-            model.addAttribute("corpIndustryName", corpIndustryOptional.get().getName());
+            model.addAttribute("name", corpIndustryOptional.get().getName());
         }
-        model.addAttribute("corpIndustryId", id);
+        model.addAttribute("id", id);
         return "admin/industry/industryEdit";
     }
 
     @PostMapping("/corp-industry/edit")
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp Industry Resource', 'urn:servlet-authz:protected:admin:industry:edit')")
-    public String corpIndustryEdit(HttpServletRequest request, @Valid @ModelAttribute UpdateCorpIndustryVM updateCorpIndustryVM, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String corpIndustryEdit(HttpServletRequest request, @Valid @ModelAttribute UpdateIndustryVM updateIndustryVM, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_ERROR_LIST, bindingResult.getAllErrors());
-            return "redirect:/admin/corp-industry/edit/" + updateCorpIndustryVM.getId();
+            return "redirect:/admin/corp-industry/edit/" + updateIndustryVM.getId();
         }
         try {
-            corpIndustryService.update(updateCorpIndustryVM);
+            industryService.update(updateIndustryVM);
         } catch (BindingResultException e) {
             bindingResult.reject(String.valueOf(HttpStatus.SC_BAD_REQUEST), e.getMessage());
-            return "redirect:/admin/corp-industry/edit/" + updateCorpIndustryVM.getId();
+            return "redirect:/admin/corp-industry/edit/" + updateIndustryVM.getId();
         }
         return "redirect:/admin/corp-industry";
     }
@@ -184,9 +189,9 @@ public class AdminController {
         if (jobLocationOptional.isEmpty()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         } else {
-            model.addAttribute("jobLocationName", jobLocationOptional.get().getName());
+            model.addAttribute("name", jobLocationOptional.get().getName());
         }
-        model.addAttribute("jobLocationId", id);
+        model.addAttribute("id", id);
         return "admin/jobLocation/jobLocationEdit";
     }
 
@@ -211,5 +216,72 @@ public class AdminController {
     @ResponseBody
     public BasicResponseDto<Void> deleteJobLocation(HttpServletRequest request, @Valid @RequestBody DeleteEntityVM deleteEntityVM) {
         return jobLocationService.delete(deleteEntityVM);
+    }
+
+    @GetMapping("/job-title")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    public String jobTitleList(HttpServletRequest request) {
+        return "admin/jobTitle/jobTitleList";
+    }
+
+    @PostMapping("/job-title/search")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    @ResponseBody
+    public BasicResponseDto<PaginationDto<JobTitleDto>> searchJobTitle(HttpServletRequest request, @Valid @RequestBody JobTitleSearchVM searchVM) {
+        return jobTitleService.search(searchVM);
+    }
+
+    @GetMapping("/job-title/create")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    public String createJobTitle(HttpServletRequest request) {
+        return "admin/jobTitle/createJobTitle";
+    }
+
+    @PostMapping("/job-title/create")
+    @PreAuthorize("@oauth2Security.hasMultipleResourcePermission(#request, T(java.util.Arrays).asList(new com.hronline.obj.AuthzRequest('Admin Resource', T(java.util.Arrays).asList('urn:servlet-authz:protected:admin:access')), new com.hronline.obj.AuthzRequest('Corp JobTitle Resource', T(java.util.Arrays).asList('urn:servlet-authz:protected:admin:job-title:create'))))")
+    public String createJobTitleSubmit(HttpServletRequest request, @Valid @ModelAttribute CreateJobTitleVM createJobTitleVM, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_ERROR_LIST, bindingResult.getAllErrors());
+            return "redirect:/admin/job-title/create";
+        }
+        jobTitleService.save(createJobTitleVM);
+        redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE, "Thêm mới chức vụ thành công");
+        return "redirect:/admin/job-title/create";
+    }
+
+    @GetMapping("/job-title/edit/{id}")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp JobTitle Resource', 'urn:servlet-authz:protected:admin:job-title:edit')")
+    public String jobTitleEdit(HttpServletRequest request, HttpServletResponse response, @Valid @NotBlank @PathVariable String id, Model model) throws IOException {
+        Optional<JobTitle> jobTitleOptional = jobTitleService.findById(id);
+        if (jobTitleOptional.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            model.addAttribute("name", jobTitleOptional.get().getName());
+        }
+        model.addAttribute("id", id);
+        return "admin/jobTitle/jobTitleEdit";
+    }
+
+    @PostMapping("/job-title/edit")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp JobTitle Resource', 'urn:servlet-authz:protected:admin:job-title:edit')")
+    public String jobTitleEdit(HttpServletRequest request, @Valid @ModelAttribute UpdateJobTitleVM updateJobTitleVM, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_ERROR_LIST, bindingResult.getAllErrors());
+            return "redirect:/admin/job-title/edit/" + updateJobTitleVM.getId();
+        }
+        try {
+            jobTitleService.update(updateJobTitleVM);
+        } catch (BindingResultException e) {
+            bindingResult.reject(String.valueOf(HttpStatus.SC_BAD_REQUEST), e.getMessage());
+            return "redirect:/admin/job-title/edit/" + updateJobTitleVM.getId();
+        }
+        return "redirect:/admin/job-title";
+    }
+
+    @DeleteMapping("/job-title/delete")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp JobTitle Resource', 'urn:servlet-authz:protected:admin:job-title:delete')")
+    @ResponseBody
+    public BasicResponseDto<Void> deleteJobTitle(HttpServletRequest request, @Valid @RequestBody DeleteEntityVM deleteEntityVM) {
+        return jobTitleService.delete(deleteEntityVM);
     }
 }

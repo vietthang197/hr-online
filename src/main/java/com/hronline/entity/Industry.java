@@ -2,9 +2,7 @@ package com.hronline.entity;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.NaturalId;
 import org.hibernate.search.engine.backend.types.Sortable;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.DocumentId;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
@@ -18,10 +16,10 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "corp_industry")
+@Table(name = "industry")
 @Indexed
 @ToString
-public class CorpIndustry extends SuperEntity implements Serializable {
+public class Industry extends SuperEntity implements Serializable {
 
     @Id
     @GeneratedValue(generator = "hibernate-uuid")
@@ -33,4 +31,6 @@ public class CorpIndustry extends SuperEntity implements Serializable {
     @Column(length = 100)
     @FullTextField(analyzer = "customAnalyzer")
     private String name;
+
+
 }
