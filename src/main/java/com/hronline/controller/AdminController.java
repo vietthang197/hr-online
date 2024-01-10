@@ -5,10 +5,12 @@ import com.hronline.entity.Industry;
 import com.hronline.entity.JobLocation;
 import com.hronline.entity.JobTitle;
 import com.hronline.exception.BindingResultException;
+import com.hronline.services.CorpService;
 import com.hronline.services.IndustryService;
 import com.hronline.services.JobLocationService;
 import com.hronline.services.JobTitleService;
 import com.hronline.util.HrConstant;
+import com.hronline.vm.corp.CreateCorpVM;
 import com.hronline.vm.industry.IndustrySearchVM;
 import com.hronline.vm.industry.CreateIndustryVM;
 import com.hronline.vm.DeleteEntityVM;
@@ -19,6 +21,7 @@ import com.hronline.vm.jobTitle.UpdateJobTitleVM;
 import com.hronline.vm.location.CreateJobLocationVM;
 import com.hronline.vm.location.JobLocationSearchVM;
 import com.hronline.vm.location.UpdateJobLocationVM;
+import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -37,16 +40,13 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminController {
 
-    @Autowired
-    private IndustryService industryService;
-
-    @Autowired
-    private JobLocationService jobLocationService;
-
-    @Autowired
-    private JobTitleService jobTitleService;
+    private final IndustryService industryService;
+    private final JobLocationService jobLocationService;
+    private final JobTitleService jobTitleService;
+    private final CorpService corpService;
 
     @GetMapping
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
@@ -82,6 +82,18 @@ public class AdminController {
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
     public String createCorp(HttpServletRequest request) {
         return "admin/corp/createCorp";
+    }
+
+    @PostMapping("/corp/create")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    public String submitCorpData(HttpServletRequest request, @Valid @ModelAttribute CreateCorpVM createCorpVM, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_ERROR_LIST, bindingResult.getAllErrors());
+            return "redirect:/admin/corp/create";
+        }
+        corpService.save(createCorpVM);
+        redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE, "Thêm mới công ty thành công");
+        return "redirect:/admin/corp/create";
     }
 
     @GetMapping("/corp-industry")
@@ -284,4 +296,6 @@ public class AdminController {
     public BasicResponseDto<Void> deleteJobTitle(HttpServletRequest request, @Valid @RequestBody DeleteEntityVM deleteEntityVM) {
         return jobTitleService.delete(deleteEntityVM);
     }
+
+
 }
