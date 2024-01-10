@@ -1926,67 +1926,6 @@
           ]
         }
       }
-    ],
-    "org.keycloak.keys.KeyProvider": [
-      {
-        "id": "5cce94aa-7e01-449d-b8d3-25ad8fb82fe9",
-        "name": "rsa-enc",
-        "providerId": "rsa-enc",
-        "subComponents": {},
-        "config": {
-          "privateKey": [
-            "**********"
-          ],
-          "certificate": [
-            "MIIBnjCCAQcCBgGKwKwQ+jANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDDApxdWlja3N0YXJ0MB4XDTIzMDkyMzA2MTE1NloXDTMzMDkyMzA2MTMzNlowFTETMBEGA1UEAwwKcXVpY2tzdGFydDCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAq1awrk7QK24Gmcy9Yb4dMbS+ZnO6NDaj1Z2F5C74HMIgtwYyxsNbRhBqCWlw7kmkZZaG5udyQYY8d91Db/uc/1DBuJMrQVsYXjVSpy+hoKpTWmzGhXzyzwhfJAICp7Iu/TTKPp+ip0mPGHlJnnP6dr4ztjY7EgFXFhEDFYSd9S8CAwEAATANBgkqhkiG9w0BAQsFAAOBgQAcOvCQ/dSIV6cAzhB+8Vtfx671rO44uPU9ZYDhWPnbvrrKs+Tv2NJBYgOuj7CY6vqEEHstzg+yepYu1Jn8eSLhWRV7spSZQCdHam1zPx7qze981L6maX+fX/dMDISx9ZopDmmJhAzHaUSZG0058brzak2kvNAirWdaMVPD7krG5w=="
-          ],
-          "priority": [
-            "100"
-          ]
-        }
-      },
-      {
-        "id": "eed2caf1-e684-49a6-8049-3dff44c7e879",
-        "name": "aes-generated",
-        "providerId": "aes-generated",
-        "subComponents": {},
-        "config": {
-          "priority": [
-            "100"
-          ]
-        }
-      },
-      {
-        "id": "d12ca130-2b56-4172-915a-7e7216f352e7",
-        "name": "hmac-generated",
-        "providerId": "hmac-generated",
-        "subComponents": {},
-        "config": {
-          "priority": [
-            "100"
-          ],
-          "algorithm": [
-            "HS256"
-          ]
-        }
-      },
-      {
-        "id": "94e944e4-83bb-49a7-8713-5ca79ecc53b4",
-        "name": "rsa",
-        "providerId": "rsa",
-        "subComponents": {},
-        "config": {
-          "privateKey": [
-            "**********"
-          ],
-          "certificate": [
-            "MIIBnjCCAQcCBgGKwKwQ+DANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDDApxdWlja3N0YXJ0MB4XDTIzMDkyMzA2MTE1NloXDTMzMDkyMzA2MTMzNlowFTETMBEGA1UEAwwKcXVpY2tzdGFydDCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAq1awrk7QK24Gmcy9Yb4dMbS+ZnO6NDaj1Z2F5C74HMIgtwYyxsNbRhBqCWlw7kmkZZaG5udyQYY8d91Db/uc/1DBuJMrQVsYXjVSpy+hoKpTWmzGhXzyzwhfJAICp7Iu/TTKPp+ip0mPGHlJnnP6dr4ztjY7EgFXFhEDFYSd9S8CAwEAATANBgkqhkiG9w0BAQsFAAOBgQCpr3N8lEeuRiupQoarjHcs5A+Afo8HsLHWHoFurErhtZNGibY+5R9IMamVKj7wVFaZU77XWEUoo5k48J0Hjn8iKwre+JcCmd5w75xS9RiKzbPKXb50NFh6O7OosTakHZXETf1riw5gTtzEJ8z1qusqxzpW4drnpKQSt4GL2x5kqA=="
-          ],
-          "priority": [
-            "100"
-          ]
-        }
-      }
     ]
   },
   "internationalizationEnabled": false,

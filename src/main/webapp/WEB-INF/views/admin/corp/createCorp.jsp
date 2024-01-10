@@ -20,6 +20,33 @@
 
     <!-- Theme style -->
     <link rel="stylesheet" href="/resources/adminlte/css/adminlte.min.css">
+    <style>
+        .dropzone {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        img.preview {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 10px;
+            display: none;
+        }
+        .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <!--
 `body` tag options:
@@ -36,35 +63,7 @@
     <jsp:include page="../header.jsp"/>
     <!-- /.navbar -->
 
-    <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
-        <!-- Brand Logo -->
-        <a href="/admin" class="brand-link">
-            <img src="/resources/logo.svg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-                 style="opacity: .8">
-            <span class="brand-text font-weight-light">HR Online</span>
-        </a>
-
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <!-- Sidebar user panel (optional) -->
-            <div class="user-panel mt-3 pb-3 mb-3">
-                <div class="d-flex flex-column">
-                    <div class="p-2">
-                        <a href="#" class="d-block">Xin chào <%=oauth2Security.getUsername()%>
-                        </a>
-                    </div>
-                    <div class="p-2">
-                        <a href="/sso/logout" class="d-block">Đăng xuất</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Sidebar Menu -->
-            <jsp:include page="../sideMenu.jsp"/>
-            <!-- /.sidebar-menu -->
-        </div>
-        <!-- /.sidebar -->
-    </aside>
+    <jsp:include page="../miniSideMenu.jsp"/>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -147,6 +146,18 @@
                                           placeholder=""></textarea>
                             </div>
                         </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6 offset-md-3">
+                                    <div class="dropzone" id="dropzone">
+                                        <p id="uploadText">Kéo và thả hình ảnh hoặc <label for="fileInput" class="text-decoration-underline">nhấn vào đây</label> để tải lên.</p>
+                                        <input type="file" id="fileInput" style="display: none;">
+                                        <button id="deleteButton" class="delete-button" style="display: none;"><i class="fas fa-times"></i></button>
+                                        <img id="preview" class="preview" src="" alt="Preview">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!-- /.col -->
                     </div>
                     <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:create")) { %>
@@ -180,5 +191,66 @@
 <script src="/resources/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE -->
 <script src="/resources/adminlte/js/adminlte.js"></script>
+<script>
+    $(".alert-msg").fadeTo(2000, 500).slideUp(500, function(){
+        $(".alert-msg").slideUp(500);
+    });
+</script>
+<script>
+    $(document).ready(function() {
+
+        $("#dropzone").on("dragover", function(event) {
+            event.preventDefault();
+            $(this).addClass("dragover");
+        });
+
+        $("#dropzone").on("dragleave", function(event) {
+            event.preventDefault();
+            $(this).removeClass("dragover");
+        });
+
+        $("#dropzone").on("drop", function(event) {
+            event.preventDefault();
+            $(this).removeClass("dragover");
+
+            var file = event.originalEvent.dataTransfer.files[0];
+            displayImage(file);
+        });
+
+        $("#fileInput").on("change", function() {
+            var file = this.files[0];
+            displayImage(file);
+        });
+
+        $("#deleteButton").on("click", function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            $("#preview").attr("src", "");
+            $("#preview").hide();
+            $("#deleteButton").hide();
+            $("#fileInput").val("");
+            showUploadText();
+        });
+
+        function displayImage(file) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                $("#preview").attr("src", event.target.result);
+                $("#preview").show();
+                $("#deleteButton").show();
+                hideUploadText();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function hideUploadText() {
+            $("#uploadText").hide();
+        }
+
+        function showUploadText() {
+            $("#uploadText").show();
+        }
+    });
+</script>
 </body>
 </html>
