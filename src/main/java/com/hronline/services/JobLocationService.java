@@ -10,6 +10,7 @@ import com.hronline.vm.location.CreateJobLocationVM;
 import com.hronline.vm.location.JobLocationSearchVM;
 import com.hronline.vm.location.UpdateJobLocationVM;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface JobLocationService {
@@ -22,4 +23,6 @@ public interface JobLocationService {
     void update(UpdateJobLocationVM updateJobLocationVM) throws BindingResultException;
 
     BasicResponseDto<Void> delete(DeleteEntityVM deleteEntityVM);
+
+    List<JobLocationDto> findAll();
 }

@@ -10,6 +10,7 @@ import com.hronline.vm.industry.CreateIndustryVM;
 import com.hronline.vm.DeleteEntityVM;
 import com.hronline.vm.industry.UpdateIndustryVM;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IndustryService {
@@ -21,5 +22,7 @@ public interface IndustryService {
 
     void update(UpdateIndustryVM updateIndustryVM) throws BindingResultException;
     Optional<Industry> findById(String id);
+
+    List<IndustryDto> findAll();
 
 }

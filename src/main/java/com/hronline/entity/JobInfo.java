@@ -1,8 +1,6 @@
 package com.hronline.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
@@ -11,8 +9,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -20,31 +17,37 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "industry")
+@Table(name = "corporation")
 @Indexed
 @ToString
-public class Industry extends SuperEntity implements Serializable {
-
+public class JobInfo extends SuperEntity implements Serializable {
     @Id
     @GeneratedValue(generator = "hibernate-uuid")
     @GenericGenerator(name = "hibernate-uuid", strategy = "uuid2")
     @GenericField(sortable = Sortable.YES)
     private String id;
 
-    // Tên ngành nghề của công ty
-    @Column(length = 100)
+    @Column(length = 200)
     @FullTextField(analyzer = "customAnalyzer")
     private String name;
 
+    @FullTextField(analyzer = "customAnalyzer")
+    private String tags;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "corporation_industries", joinColumns = {
-            @JoinColumn(name = "corp_id", referencedColumnName = "id")
-    }, inverseJoinColumns = {
-            @JoinColumn(name = "industry_id", referencedColumnName = "id")
-    })
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonIgnore
-    private Set<Corporation> corporations = new HashSet<>();
+    @GenericField
+    private BigDecimal salaryFrom;
+    @GenericField
+    private BigDecimal salaryTo;
+
+    private BigDecimal reward;
+
+    @OneToOne
+    private JobLocation jobLocation;
+
+    private String description;
+
+    @OneToOne
+    private Corporation corporation;
+
+    private Boolean urgent = false;
 }

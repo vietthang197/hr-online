@@ -16,6 +16,7 @@ import com.hronline.vm.location.UpdateJobLocationVM;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -71,5 +72,11 @@ public class JobLocationServiceImpl implements JobLocationService {
     public BasicResponseDto<Void> delete(DeleteEntityVM deleteEntityVM) {
         jobLocationRepository.deleteAllById(deleteEntityVM.getIds());
         return BasicResponseDto.ok();
+    }
+
+    @Override
+    @Transactional
+    public List<JobLocationDto> findAll() {
+        return jobLocationMapper.toListDto(jobLocationRepository.findAll());
     }
 }

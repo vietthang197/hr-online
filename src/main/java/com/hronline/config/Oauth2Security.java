@@ -46,7 +46,7 @@ public class Oauth2Security  {
         boolean hasPerm = true;
         for (int i = 0; i < authzRequestList.size() && hasPerm; i++) {
             AuthzRequest request = authzRequestList.get(i);
-            hasPerm = request.getScopes().stream().allMatch(item -> authzContext.hasPermission(request.getResourceName(), item));
+            hasPerm = request.getScopes().parallelStream().allMatch(item -> authzContext.hasPermission(request.getResourceName(), item));
         }
         return hasPerm;
     }

@@ -6,24 +6,21 @@
 <%@ page import="org.springframework.validation.ObjectError" %>
 <%@ page import="org.springframework.util.CollectionUtils" %>
 <%@ page import="com.hronline.util.HrConstant" %>
-<%@ page import="com.hronline.dto.JobLocationDto" %>
 <%@ page import="com.hronline.dto.CorporationDto" %>
-<%@ page import="com.hronline.entity.JobLocation" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 
 <%
     ApplicationContext applicationContext = RequestContextUtils.findWebApplicationContext(request);
     Oauth2Security oauth2Security = (Oauth2Security) applicationContext.getBean("oauth2Security");
-    List<JobLocationDto> locations = (List<JobLocationDto>) request.getAttribute("locations");
-    List<CorporationDto> corporations = (List<CorporationDto>) request.getAttribute("corporation");
+    List<IndustryDto> industryDtos = (List<IndustryDto>) request.getAttribute("industries");
 %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Thêm mới công việc</title>
+    <title>Sửa công ty</title>
 
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="/resources/adminlte/plugins/fontawesome-free/css/all.min.css">
@@ -83,12 +80,12 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Thêm mới công việc</h1>
+                        <h1 class="m-0">Sửa công ty</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
-                            <li class="breadcrumb-item active">Thêm mới công việc</li>
+                            <li class="breadcrumb-item active">Sửa công ty</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -128,77 +125,66 @@
             </div>
             <%}%>
             <div class="container-fluid">
-                <form action="/admin/job/create" method="POST">
+                <form action="/admin/corp/edit" method="POST">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="name">Tên công việc <span class="text-danger">*</span></label>
+                                <label for="name">Tên công ty <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="name" name="name"
-                                       placeholder="Nhân viên kỹ thuật...">
+                                       placeholder="Công ty A..." value="<%=(String) request.getAttribute("name")%>">
                             </div>
                             <!-- /.form-group -->
                             <div class="form-group">
-                                <label for="tags">Nhãn dán (Cách nhau bởi dấu phẩy) <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="tags" name="tags" placeholder="">
+                                <label for="taxId">Mã số thuế <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="taxId" name="taxId" placeholder="" value="<%=(String) request.getAttribute("taxId")%>">
                             </div>
                             <!-- /.form-group -->
                         </div>
                         <!-- /.col -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="salaryFrom">Mức lương thấp nhất <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" id="salaryFrom" name="salaryFrom" placeholder="">
-                            </div>
-                            <!-- /.form-group -->
-                            <div class="form-group">
-                                <label for="salaryTo">Mức lương cao nhất <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="salaryTo" name="salaryTo" placeholder="">
-                            </div>
-                            <!-- /.form-group -->
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="reward">Hoa hồng <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" id="reward" name="reward" placeholder="">
-                            </div>
-                            <!-- /.form-group -->
-                            <div class="form-group">
-                                <label for="corporation">Đăng cho công ty</label>
-                                <select class="form-control" id="corporation" name="corporation">
-                                    <%for (CorporationDto corp : corporations) {%>
-                                    <option value="<%=corp.getId()%>"><%=corp.getName()%></option>
-                                    <%}%>
-                                </select>
-                            </div>
-                            <!-- /.form-group -->
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="location">Nơi làm việc: <span class="text-danger">*</span></label>
-                                <select class="form-control" id="location" name="location">
-                                    <%for (JobLocationDto jobLocation : locations) {%>
-                                    <option value="<%=jobLocation.getId()%>"><%=jobLocation.getName()%></option>
+                                <label for="industries">Ngành nghề <span class="text-danger">*</span></label>
+                                <select class="select2 form-control select2-container--bootstrap4" id="industries" name="industries">
+                                    <%for (IndustryDto industryDto : industryDtos) {%>
+                                    <option value="<%=industryDto.getId()%>"><%=industryDto.getName()%></option>
                                     <%}%>
                                 </select>
                             </div>
                             <!-- /.form-group -->
                             <div class="form-group">
-                                <label for="urgent">Cần gấp: <span class="text-danger">*</span></label>
-                                <input type="checkbox" class="form-control-sm" id="urgent" name="urgent">
+                                <label for="address">Địa chỉ <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="address" name="address" placeholder="" value="<%=(String) request.getAttribute("address")%>">
+                            </div>
+                            <!-- /.form-group -->
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone">Số điện thoại <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="" value="<%=(String) request.getAttribute("phone")%>">
+                            </div>
+                            <!-- /.form-group -->
+                            <div class="form-group">
+                                <label for="website">Website</label>
+                                <input type="text" class="form-control" id="website" name="website" placeholder="" value="<%=(String) request.getAttribute("website")%>">
                             </div>
                             <!-- /.form-group -->
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label for="description">Mô tả công việc</label>
+                                <label for="description">Mô tả công ty</label>
                                 <textarea rows="4" class="form-control" id="description" name="description"
-                                          placeholder=""></textarea>
+                                          placeholder="" ><%=(String) request.getAttribute("description")%></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <input type="hidden" class="form-control" id="id" name="id" value="<%=(String)request.getAttribute("id")%>" required>
                             </div>
                         </div>
                         <!-- /.col -->
                     </div>
                     <% if (oauth2Security.hasResourcePermission(request, "Admin Resource", "urn:servlet-authz:protected:admin:access")) { %>
-                    <button type="submit" class="btn btn-primary btn-sm">Thêm</button>
+                    <button type="submit" class="btn btn-warning btn-sm">Sửa</button>
                     <%}%>
                 </form>
                 <!-- /.row -->
@@ -236,9 +222,16 @@
 </script>
 <script>
     $(document).ready(function() {
-        $('#industries').select2({
-            multiple: true
-        });
+        var selectedIndustries = [];
+        <%for(IndustryDto industryDto : (List<IndustryDto>)request.getAttribute("corpIndustries")) {%>
+            selectedIndustries.push('<%=industryDto.getId()%>');
+        <%}%>
+       $('#industries').select2({
+           multiple: true
+       });
+
+       $('#industries').val(selectedIndustries);
+       $('#industries').trigger('change');
     });
 </script>
 </body>

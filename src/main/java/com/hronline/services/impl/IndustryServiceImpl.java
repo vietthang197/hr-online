@@ -16,6 +16,7 @@ import com.hronline.vm.industry.UpdateIndustryVM;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -73,5 +74,12 @@ public class IndustryServiceImpl implements IndustryService {
     @Transactional
     public Optional<Industry> findById(String id) {
         return industryRepository.findById(id);
+    }
+
+    @Override
+    @Transactional
+    public List<IndustryDto> findAll() {
+        List<Industry> industries = industryRepository.findAll();
+        return industryMapper.toListDto(industries);
     }
 }

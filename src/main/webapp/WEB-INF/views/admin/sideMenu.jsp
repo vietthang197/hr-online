@@ -122,30 +122,30 @@
                 <%}%>
             </ul>
         </li>
-        <li class="nav-item menu-open">
-            <a href="#" class="nav-link">
-                <i class="fas fa-briefcase"></i>
-                <p>
-                    Chức vụ công việc
-                    <i class="fas fa-angle-left right"></i>
-                </p>
-            </a>
-            <ul class="nav nav-treeview">
-                <li class="nav-item">
-                    <a href="/admin/job-title" class="nav-link <% if ("/admin/job-title".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Danh sách chức vụ</p>
-                    </a>
-                </li>
-                <% if (oauth2Security.hasResourcePermission(request, "Corp JobTitle Resource", "urn:servlet-authz:protected:admin:job-title:create")) {%>
-                <li class="nav-item">
-                    <a href="/admin/job-title/create" class="nav-link <% if ("/admin/job-title/create".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Thêm mới chức vụ</p>
-                    </a>
-                </li>
-                <%}%>
-            </ul>
-        </li>
+<%--        <li class="nav-item menu-open">--%>
+<%--            <a href="#" class="nav-link">--%>
+<%--                <i class="fas fa-briefcase"></i>--%>
+<%--                <p>--%>
+<%--                    Chức vụ công việc--%>
+<%--                    <i class="fas fa-angle-left right"></i>--%>
+<%--                </p>--%>
+<%--            </a>--%>
+<%--            <ul class="nav nav-treeview">--%>
+<%--                <li class="nav-item">--%>
+<%--                    <a href="/admin/job-title" class="nav-link <% if ("/admin/job-title".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">--%>
+<%--                        <i class="far fa-circle nav-icon"></i>--%>
+<%--                        <p>Danh sách chức vụ</p>--%>
+<%--                    </a>--%>
+<%--                </li>--%>
+<%--                <% if (oauth2Security.hasResourcePermission(request, "Corp JobTitle Resource", "urn:servlet-authz:protected:admin:job-title:create")) {%>--%>
+<%--                <li class="nav-item">--%>
+<%--                    <a href="/admin/job-title/create" class="nav-link <% if ("/admin/job-title/create".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">--%>
+<%--                        <i class="far fa-circle nav-icon"></i>--%>
+<%--                        <p>Thêm mới chức vụ</p>--%>
+<%--                    </a>--%>
+<%--                </li>--%>
+<%--                <%}%>--%>
+<%--            </ul>--%>
+<%--        </li>--%>
     </ul>
 </nav>

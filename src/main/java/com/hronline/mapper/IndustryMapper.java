@@ -6,6 +6,8 @@ import com.hronline.entity.Industry;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface IndustryMapper {
 
@@ -14,4 +16,6 @@ public interface IndustryMapper {
     IndustryDto toDto(Industry industry);
 
     PaginationDto<IndustryDto> toPaginationDto(PaginationDto<Industry> corpIndustryPagination);
+
+    List<IndustryDto> toListDto(List<Industry> industries);
 }

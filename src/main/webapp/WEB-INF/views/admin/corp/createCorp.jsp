@@ -1,12 +1,18 @@
 <%@ page import="org.springframework.web.servlet.support.RequestContextUtils" %>
 <%@ page import="org.springframework.context.ApplicationContext" %>
 <%@ page import="com.hronline.config.Oauth2Security" %>
+<%@ page import="com.hronline.dto.IndustryDto" %>
+<%@ page import="java.util.List" %>
+<%@ page import="org.springframework.validation.ObjectError" %>
+<%@ page import="org.springframework.util.CollectionUtils" %>
+<%@ page import="com.hronline.util.HrConstant" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 
 <%
     ApplicationContext applicationContext = RequestContextUtils.findWebApplicationContext(request);
     Oauth2Security oauth2Security = (Oauth2Security) applicationContext.getBean("oauth2Security");
+    List<IndustryDto> industryDtos = (List<IndustryDto>) request.getAttribute("industries");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +26,7 @@
 
     <!-- Theme style -->
     <link rel="stylesheet" href="/resources/adminlte/css/adminlte.min.css">
+    <link rel="stylesheet" href="/resources/css/select2.min.css">
     <style>
         .dropzone {
             border: 2px dashed #ccc;
@@ -87,6 +94,35 @@
 
         <!-- Main content -->
         <div class="content">
+            <% String successMessage = (String) request.getAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE); %>
+            <% if (successMessage != null) {%>
+            <div class="row alert-msg">
+                <div class="col-md-6">
+                    <ul class="list-group mb-2">
+                        <li class="list-group-item list-group-item-success">
+                            <%=successMessage%>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <%}%>
+            <% List<ObjectError> errorList = (List<ObjectError>) request.getAttribute(HrConstant.ATTRIBUTE_ERROR_LIST); %>
+            <% if (!CollectionUtils.isEmpty(errorList)) {%>
+            <div class="row alert-msg">
+                <div class="col-md-6">
+                    <ul class="list-group mb-2">
+                        <%
+                            for (ObjectError error : errorList) {
+                        %>
+                        <li class="list-group-item list-group-item-danger">
+                            <%=error.getDefaultMessage()%>
+                        </li>
+
+                    </ul>
+                    <%}%>
+                </div>
+            </div>
+            <%}%>
             <div class="container-fluid">
                 <form action="/admin/corp/create" method="POST">
                     <div class="row">
@@ -106,8 +142,12 @@
                         <!-- /.col -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="industry">Ngành nghề <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="industry" name="industry" placeholder="">
+                                <label for="industries">Ngành nghề <span class="text-danger">*</span></label>
+                                <select class="select2 form-control select2-container--bootstrap4" id="industries" name="industries">
+                                    <%for (IndustryDto industryDto : industryDtos) {%>
+                                    <option value="<%=industryDto.getId()%>"><%=industryDto.getName()%></option>
+                                    <%}%>
+                                </select>
                             </div>
                             <!-- /.form-group -->
                             <div class="form-group">
@@ -123,19 +163,8 @@
                             </div>
                             <!-- /.form-group -->
                             <div class="form-group">
-                                <label for="email">Email <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" id="email" name="email" placeholder="">
-                            </div>
-                            <!-- /.form-group -->
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
                                 <label for="website">Website</label>
                                 <input type="text" class="form-control" id="website" name="website" placeholder="">
-                            </div>
-                            <!-- /.form-group -->
-                            <div class="form-group">
-
                             </div>
                             <!-- /.form-group -->
                         </div>
@@ -146,21 +175,9 @@
                                           placeholder=""></textarea>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <div class="row">
-                                <div class="col-md-6 offset-md-3">
-                                    <div class="dropzone" id="dropzone">
-                                        <p id="uploadText">Kéo và thả hình ảnh hoặc <label for="fileInput" class="text-decoration-underline">nhấn vào đây</label> để tải lên.</p>
-                                        <input type="file" id="fileInput" style="display: none;">
-                                        <button id="deleteButton" class="delete-button" style="display: none;"><i class="fas fa-times"></i></button>
-                                        <img id="preview" class="preview" src="" alt="Preview">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <!-- /.col -->
                     </div>
-                    <% if (oauth2Security.hasResourcePermission(request, "Corp Industry Resource", "urn:servlet-authz:protected:admin:industry:create")) { %>
+                    <% if (oauth2Security.hasResourcePermission(request, "Admin Resource", "urn:servlet-authz:protected:admin:access")) { %>
                     <button type="submit" class="btn btn-primary btn-sm">Thêm</button>
                     <%}%>
                 </form>
@@ -191,6 +208,7 @@
 <script src="/resources/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE -->
 <script src="/resources/adminlte/js/adminlte.js"></script>
+<script src="/resources/js/select2.min.js"></script>
 <script>
     $(".alert-msg").fadeTo(2000, 500).slideUp(500, function(){
         $(".alert-msg").slideUp(500);
@@ -198,58 +216,9 @@
 </script>
 <script>
     $(document).ready(function() {
-
-        $("#dropzone").on("dragover", function(event) {
-            event.preventDefault();
-            $(this).addClass("dragover");
-        });
-
-        $("#dropzone").on("dragleave", function(event) {
-            event.preventDefault();
-            $(this).removeClass("dragover");
-        });
-
-        $("#dropzone").on("drop", function(event) {
-            event.preventDefault();
-            $(this).removeClass("dragover");
-
-            var file = event.originalEvent.dataTransfer.files[0];
-            displayImage(file);
-        });
-
-        $("#fileInput").on("change", function() {
-            var file = this.files[0];
-            displayImage(file);
-        });
-
-        $("#deleteButton").on("click", function(e) {
-            e.stopPropagation();
-            e.preventDefault();
-            $("#preview").attr("src", "");
-            $("#preview").hide();
-            $("#deleteButton").hide();
-            $("#fileInput").val("");
-            showUploadText();
-        });
-
-        function displayImage(file) {
-            var reader = new FileReader();
-            reader.onload = function(event) {
-                $("#preview").attr("src", event.target.result);
-                $("#preview").show();
-                $("#deleteButton").show();
-                hideUploadText();
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function hideUploadText() {
-            $("#uploadText").hide();
-        }
-
-        function showUploadText() {
-            $("#uploadText").show();
-        }
+       $('#industries').select2({
+           multiple: true
+       });
     });
 </script>
 </body>

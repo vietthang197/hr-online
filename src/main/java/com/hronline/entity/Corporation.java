@@ -1,6 +1,9 @@
 package com.hronline.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.checkerframework.checker.units.qual.A;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
@@ -9,6 +12,9 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -32,8 +38,12 @@ public class Corporation extends SuperEntity implements Serializable {
     private String name;
 
     // ngành nghề công ty
-    @Column(length = 200)
-    private String industry;
+    @ManyToMany(mappedBy = "corporations", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
+    @BatchSize(size = 20)
+    private Set<Industry> industries = new HashSet<>();
 
     // Địa chỉ công ty
     @Column(length = 500)

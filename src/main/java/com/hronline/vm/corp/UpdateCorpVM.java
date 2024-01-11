@@ -1,16 +1,17 @@
 package com.hronline.vm.corp;
 
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-public class CreateCorpVM implements Serializable {
+@AllArgsConstructor
+public class UpdateCorpVM implements Serializable {
+    private String id;
     private String name;
     private Set<String> industries;
     private String taxId;

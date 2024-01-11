@@ -15,11 +15,11 @@
 			</Policies>
 		</RollingFile>
 	</Appenders>
-	<Loggers>
-		<Root level="ALL">
+	<AsyncLoggers>
+		<Root level="INFO">
 			<AppenderRef ref="api"/>
 			<AppenderRef ref="Console"/>
 		</Root>
 
-	</Loggers>
+	</AsyncLoggers>
 </Configuration>
