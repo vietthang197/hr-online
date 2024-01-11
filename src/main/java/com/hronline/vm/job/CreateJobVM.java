@@ -23,7 +23,7 @@ public class CreateJobVM implements Serializable {
 
     private BigDecimal reward;
 
-    private JobLocation jobLocation;
+    private String location;
 
     private String description;
 

@@ -7,10 +7,7 @@ import com.hronline.entity.JobLocation;
 import com.hronline.entity.JobTitle;
 import com.hronline.exception.BindingResultException;
 import com.hronline.mapper.IndustryMapper;
-import com.hronline.services.CorpService;
-import com.hronline.services.IndustryService;
-import com.hronline.services.JobLocationService;
-import com.hronline.services.JobTitleService;
+import com.hronline.services.*;
 import com.hronline.util.HrConstant;
 import com.hronline.vm.corp.CorpSearchVM;
 import com.hronline.vm.corp.CreateCorpVM;
@@ -19,6 +16,8 @@ import com.hronline.vm.industry.IndustrySearchVM;
 import com.hronline.vm.industry.CreateIndustryVM;
 import com.hronline.vm.DeleteEntityVM;
 import com.hronline.vm.industry.UpdateIndustryVM;
+import com.hronline.vm.job.CreateJobVM;
+import com.hronline.vm.job.JobInfoSearchVM;
 import com.hronline.vm.jobTitle.CreateJobTitleVM;
 import com.hronline.vm.jobTitle.JobTitleSearchVM;
 import com.hronline.vm.jobTitle.UpdateJobTitleVM;
@@ -55,6 +54,7 @@ public class AdminController {
     private final JobTitleService jobTitleService;
     private final CorpService corpService;
     private final IndustryMapper industryMapper;
+    private final JobService jobService;
 
     @GetMapping
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
@@ -78,6 +78,30 @@ public class AdminController {
         model.addAttribute("corporations", corporationDtos);
 
         return "admin/job/createJob";
+    }
+
+    @PostMapping("/job/create")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    public String submitJob(HttpServletRequest request, @Valid @ModelAttribute CreateJobVM createJobVM, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_ERROR_LIST, bindingResult.getAllErrors());
+            return "redirect:/admin/job/create";
+        }
+        try {
+            jobService.save(createJobVM);
+        } catch (BindingResultException e) {
+            bindingResult.reject(String.valueOf(HttpStatus.SC_BAD_REQUEST), e.getMessage());
+            return "redirect:/admin/job/create/";
+        }
+        redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE, "Thêm mới công việc thành công");
+        return "redirect:/admin/job/create";
+    }
+
+    @PostMapping("/job/search")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    @ResponseBody
+    public BasicResponseDto<PaginationDto<JobInfoDto>> searchJob(HttpServletRequest request, @Valid @RequestBody JobInfoSearchVM searchVM) {
+        return jobService.search(searchVM);
     }
 
     @GetMapping("/employee")

@@ -16,7 +16,7 @@
     ApplicationContext applicationContext = RequestContextUtils.findWebApplicationContext(request);
     Oauth2Security oauth2Security = (Oauth2Security) applicationContext.getBean("oauth2Security");
     List<JobLocationDto> locations = (List<JobLocationDto>) request.getAttribute("locations");
-    List<CorporationDto> corporations = (List<CorporationDto>) request.getAttribute("corporation");
+    List<CorporationDto> corporations = (List<CorporationDto>) request.getAttribute("corporations");
 %>
 <!DOCTYPE html>
 <html lang="en">

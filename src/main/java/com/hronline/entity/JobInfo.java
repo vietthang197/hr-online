@@ -17,7 +17,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "corporation")
+@Table(name = "job_info")
 @Indexed
 @ToString
 public class JobInfo extends SuperEntity implements Serializable {
@@ -44,6 +44,7 @@ public class JobInfo extends SuperEntity implements Serializable {
     @OneToOne
     private JobLocation jobLocation;
 
+    @Lob
     private String description;
 
     @OneToOne

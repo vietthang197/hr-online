@@ -40,7 +40,7 @@ spring:
               root: D:/apache_lucene/hronline
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
       use-new-id-generator-mappings: true
 server:
   port: 8090
