@@ -2,6 +2,8 @@ package com.hronline.services;
 
 import com.hronline.dto.FileUploadManagementDto;
 import com.hronline.exception.BindingResultException;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -13,5 +15,5 @@ public interface FileUploadManagementService {
 
     FileUploadManagementDto findById(String fileId) throws FileNotFoundException;
 
-    void download(String fileId, HttpServletResponse httpServletResponse) throws IOException;
+    ResponseEntity<Resource> download(String fileId) throws IOException;
 }

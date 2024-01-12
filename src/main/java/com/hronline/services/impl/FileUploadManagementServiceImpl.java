@@ -11,8 +11,11 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FileSystem;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -68,16 +71,15 @@ public class FileUploadManagementServiceImpl implements FileUploadManagementServ
 
     @Override
     @Transactional
-    public void download(String fileId, HttpServletResponse httpServletResponse) throws IOException {
+    public ResponseEntity<Resource> download(String fileId) throws IOException {
         FileUploadManagementDto fileUploadManagementDto = findById(fileId);
         Path filePath = Paths.get(fileUploadManagementDto.getPath());
         if (Files.notExists(filePath))
             throw new FileNotFoundException("Không tìm thấy file");
 
-        httpServletResponse.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
-        httpServletResponse.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileUploadManagementDto.getOriginFileName() + "\"");
-        OutputStream os = httpServletResponse.getOutputStream();
-        os.write(Files.readAllBytes(filePath));
-
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileUploadManagementDto.getOriginFileName() + "\"")
+                .body(new InputStreamResource(new FileInputStream(filePath.toFile())));
     }
 }
