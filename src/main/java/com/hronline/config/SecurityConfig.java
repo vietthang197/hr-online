@@ -39,7 +39,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         super.configure(http);
         http.logout().logoutRequestMatcher(new AntPathRequestMatcher("/sso/logout")).permitAll().logoutSuccessUrl("/").and()
                 .authorizeRequests()
-                .antMatchers("/", "/error/*", "/resources/**", "/job-detail", "/search-job", "/blog", "/about", "/file/**").permitAll()
+                .antMatchers("/", "/error/*", "/resources/**", "/job-detail/**", "/search-job", "/blog", "/about", "/file/**", "/submit-resume").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable();
     }

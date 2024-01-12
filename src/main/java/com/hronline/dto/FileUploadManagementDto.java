@@ -16,19 +16,12 @@ import java.time.LocalDateTime;
 @Builder
 public class FileUploadManagementDto implements Serializable {
     private String id;
-
     private String originFileName;
-
     private Long size;
-
     private String path;
-
     private String downloadUrl;
-
     private String keycloakResourceId;
-
     private String docCode;
-
     private String isDeleted;
     private String createdDate;
 

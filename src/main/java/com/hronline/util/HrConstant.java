@@ -6,4 +6,5 @@ public interface HrConstant {
     String STR_N = "N";
     String STR_Y = "Y";
     String JD_CODE = "0001";
+    String RESUME_CODE = "0002";
 }

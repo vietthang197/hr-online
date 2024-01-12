@@ -1,6 +1,5 @@
 package com.hronline.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.search.engine.backend.types.Sortable;
@@ -8,12 +7,11 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextFi
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -21,49 +19,33 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "job_info")
+@Table(name = "resume_info")
 @Indexed
 @ToString
-public class JobInfo extends SuperEntity implements Serializable {
+public class ResumeInfo extends SuperEntity implements Serializable {
     @Id
     @GeneratedValue(generator = "hibernate-uuid")
     @GenericGenerator(name = "hibernate-uuid", strategy = "uuid2")
     @GenericField(sortable = Sortable.YES)
     private String id;
 
-    @Column(length = 200)
     @FullTextField(analyzer = "customAnalyzer")
-    private String name;
+    private String applicantName;
 
     @FullTextField(analyzer = "customAnalyzer")
-    private String tags;
+    private String applicantEmail;
 
-    @GenericField
-    private BigDecimal salaryFrom;
-    @GenericField
-    private BigDecimal salaryTo;
+    @FullTextField(analyzer = "customAnalyzer")
+    private String applicantFbLink;
 
-    private BigDecimal reward;
-
-    @OneToOne
-    private JobLocation jobLocation;
-
-    @Lob
-    private String description;
+    @FullTextField(analyzer = "customAnalyzer")
+    private String applicantPhone;
 
     @OneToOne
-    private Corporation corporation;
+    private FileUploadManagement fileResume;
 
-    private Boolean urgent = false;
-
-    private int vacancies;
-
-    @OneToOne
-    private FileUploadManagement fileJd;
-
-    @OneToMany(mappedBy = "jobInfo")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JsonIgnore
-    private Set<ResumeInfo> resumeInfos;
+    @IndexedEmbedded
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "job_id", referencedColumnName = "id")
+    private JobInfo jobInfo;
 }

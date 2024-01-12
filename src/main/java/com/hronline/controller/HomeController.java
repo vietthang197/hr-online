@@ -3,16 +3,19 @@ package com.hronline.controller;
 import com.hronline.dto.JobInfoDto;
 import com.hronline.exception.BindingResultException;
 import com.hronline.services.JobService;
+import com.hronline.services.ResumeInfoService;
+import com.hronline.vm.resume.CreateResumeVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -21,6 +24,7 @@ import java.util.List;
 public class HomeController {
 
     private final JobService jobService;
+    private final ResumeInfoService resumeInfoService;
 
     @GetMapping("/")
     public String homePage(Model model) {
@@ -51,4 +55,10 @@ public class HomeController {
         return "public/about";
     }
 
+    @PostMapping("/submit-resume")
+    public String submitResume(@ModelAttribute @Valid CreateResumeVM createResumeVM, RedirectAttributes redirectAttributes) throws IOException, BindingResultException {
+        resumeInfoService.save(createResumeVM);
+        redirectAttributes.addFlashAttribute("submitResumeResult", "Hệ thống đã ghi nhận CV của ứng viên");
+        return "redirect:/job-detail/" + createResumeVM.getJobId();
+    }
 }

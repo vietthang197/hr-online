@@ -186,34 +186,25 @@
             <div class="mt-4 border-b border-dashed w-full"></div> <!-- Dòng kẻ ngang -->
             <div class="mt-4">
                 <div class="grid grid-cols-2 gap-4">
-                    <button class="border border-blue-500 bg-white text-blue-500 font-semibold rounded-md py-2 px-4 flex items-center justify-center hover:border-blue-600 hover:text-blue-600">
+                    <a <%=job.getFileJd() != null ? "disabled" : ""%> href="<%=job.getFileJd() == null ? "#" : "/file/download/" + job.getFileJd().getId()%>" target="_blank" class="border border-blue-500 bg-white text-blue-500 font-semibold rounded-md py-2 px-4 flex items-center justify-center hover:border-blue-600 hover:text-blue-600">
                         Download JD
-                    </button>
+                    </a>
                     <button class="bg-blue-500 text-white font-semibold rounded-md py-2 px-4 flex items-center justify-center hover:bg-blue-600">
                         Giới thiệu ngay
                     </button>
                 </div>
             </div>
             <div class="mt-4">
-                <% if (oauth2Security.isAuthenticated()) {%>
-                    <div class="flex justify-center">
-                        <button id="open-modal" type="button" data-modal-target="crypto-modal" data-modal-toggle="crypto-modal"
-                                class="border-dotted border-2 border-gray-500 bg-white text-black-500 font-semibold rounded-md py-2 px-4 inline-block text-center w-full max-w-xs hover:border-blue-500 hover:text-blue-500">Gửi
-                            CV tới Head Hunter</button>
-                    </div>
-                <% } else {%>
                 <div class="flex justify-center">
-                    <button
-                            class="border-dotted border-2 border-red-500 bg-white text-black-500 font-semibold rounded-md py-2 px-4 inline-block text-center w-full max-w-xs hover:border-blue-500 hover:text-blue-500">Gửi
-                        CV tới Head Hunter <i class="text-red-600">(Đăng nhập để sử dụng tính năng này)</i></button>
+                    <button id="open-modal" type="button" data-modal-target="crypto-modal" data-modal-toggle="crypto-modal"
+                            class="border-dotted border-2 border-gray-500 bg-white text-black-500 font-semibold rounded-md py-2 px-4 inline-block text-center w-full max-w-xs hover:border-blue-500 hover:text-blue-500">Gửi
+                        CV tới Head Hunter</button>
                 </div>
-                <% }%>
             </div>
         </div>
     </div>
 
     <!-- Main modal -->
-    <% if (oauth2Security.isAuthenticated()) { %>
     <div id="crypto-modal" tabindex="-1" aria-hidden="true" class="inset-0 flex items-center justify-center z-50 fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative w-full max-w-md max-h-full">
             <div id="modal-backdrop" class="fixed inset-0 bg-black opacity-50"></div>
@@ -231,7 +222,7 @@
                 </div>
                 <!-- Modal body -->
                 <div class="p-6">
-                    <form>
+                    <form action="${pageContext.request.contextPath}/submit-resume" method="post" enctype="multipart/form-data" onsubmit="submitFile($event)">
                         <div class="mb-6">
                             <label for="fullName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Họ và tên</label>
                             <input type="text" id="fullName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Điền tên của bạn" required>
@@ -244,18 +235,22 @@
                             <label for="facebook" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Link facebook</label>
                             <input type="text" id="facebook" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="https://facebook.com" required>
                         </div>
+                        <div class="mb-6">
+                            <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Số điện thoại liên hệ</label>
+                            <input type="tel" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required>
+                        </div>
                         <div class="w-full h-64 flex items-center justify-center bg-gray-100 rounded-lg border-2 border-dashed border-gray-400 cursor-pointer">
-                            <label for="fileInput" class="flex flex-col items-center">
+                            <label for="fileResume" class="flex flex-col items-center">
                                 <svg class="w-12 h-12 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4m2 2h14M8 7V3m8 4V3m-8 4h8m4-4h.01"></path>
                                 </svg>
                                 <span id="fileLabel" class="text-sm text-gray-600 text-center">Kéo và thả hoặc chọn CV (doc, docx, pdf tối đa 5MB)</span>
-                                <input id="fileInput" onchange="updateFileName(this)" type="file" class="hidden">
+                                <input id="fileResume" name="fileResume" onchange="updateFileName(this)" type="file" class="hidden">
                             </label>
                         </div>
                         <div class="flex flex-col items-center justify-center mt-4">
                             <div class="w-full max-w-xs">
-                                <button id="submitButton" onclick="submitFile(this)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full">Gửi hồ sơ</button>
+                                <button id="submitButton" onclick="submitFile($event)" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full">Gửi hồ sơ</button>
                             </div>
                         </div>
                     </form>
@@ -263,12 +258,10 @@
             </div>
         </div>
     </div>
-    <%}%>
 </main>
 <jsp:include page="footer.jsp" />
 </body>
 <script src="/resources/js/navbar-toggle.js"></script>
-<% if (oauth2Security.isAuthenticated()) {%>
 <script>
     // Lấy các phần tử DOM
     const openModalBtn = document.getElementById('open-modal');
@@ -295,12 +288,15 @@
         var fileLabel = document.getElementById('fileLabel');
         fileLabel.textContent = fileName;
     }
-    function submitFile(buttonSubmit) {
+    function submitFile(event) {
         var submitButton = document.getElementById('submitButton');
         submitButton.disabled = true;
         submitButton.classList.remove('hover:bg-blue-600', 'bg-blue-500');
         submitButton.classList.add('bg-blue-400')
     }
+
+    <% if (request.getAttribute("submitResumeResult") != null) {%>
+        alert('<%=(String) request.getAttribute("submitResumeResult")%>');
+    <%}%>
 </script>
-<%}%>
 </html>

@@ -24,6 +24,7 @@ import com.hronline.vm.jobTitle.UpdateJobTitleVM;
 import com.hronline.vm.location.CreateJobLocationVM;
 import com.hronline.vm.location.JobLocationSearchVM;
 import com.hronline.vm.location.UpdateJobLocationVM;
+import com.hronline.vm.resume.ResumeSearchVM;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,7 @@ public class AdminController {
     private final CorpService corpService;
     private final IndustryMapper industryMapper;
     private final JobService jobService;
+    private final ResumeInfoService resumeInfoService;
 
     @GetMapping
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
@@ -391,5 +393,10 @@ public class AdminController {
         return jobTitleService.delete(deleteEntityVM);
     }
 
-
+    @PostMapping("/resume/search")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    @ResponseBody
+    public BasicResponseDto<PaginationDto<ResumeInfoDto>> searchJobLocation(HttpServletRequest request, @Valid @RequestBody ResumeSearchVM searchVM) {
+        return resumeInfoService.search(searchVM);
+    }
 }

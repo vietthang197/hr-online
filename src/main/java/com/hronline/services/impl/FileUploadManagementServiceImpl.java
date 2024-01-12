@@ -37,10 +37,10 @@ public class FileUploadManagementServiceImpl implements FileUploadManagementServ
     private final FileUploadManagementMapper fileUploadManagementMapper;
 
     @Override
-    public FileUploadManagementDto saveSingleFile(MultipartFile jdFile) throws IOException {
+    public FileUploadManagementDto saveSingleFile(MultipartFile file) throws IOException {
         FileUploadManagementDto fileUpload = FileUploadManagementDto.builder()
-                .originFileName(jdFile.getOriginalFilename())
-                .size(jdFile.getSize())
+                .originFileName(file.getOriginalFilename())
+                .size(file.getSize())
                 .isDeleted(HrConstant.STR_N)
                 .build();
 
@@ -49,11 +49,18 @@ public class FileUploadManagementServiceImpl implements FileUploadManagementServ
             Files.createDirectories(dataPath);
         }
 
-        String newFileName = UUID.randomUUID().toString() + "." + FilenameUtils.getExtension(jdFile.getOriginalFilename());
+        String newFileName = UUID.randomUUID() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
         String newFilePath = dataPath + File.pathSeparator + newFileName;
-        try (OutputStream os = new FileOutputStream(new File(newFilePath));
-             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(os);) {
-            bufferedOutputStream.write(jdFile.getBytes());
+
+        try (
+             BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(newFilePath));
+             BufferedInputStream is = new BufferedInputStream(file.getInputStream())
+        ) {
+            byte[] buff = new byte[1024];
+            while ((is.read(buff, 0, buff.length)) != -1) {
+                bufferedOutputStream.write(buff, 0 , buff.length);
+                bufferedOutputStream.flush();
+            }
         }
 
         fileUpload.setPath(newFilePath);
