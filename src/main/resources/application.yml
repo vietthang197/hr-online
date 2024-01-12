@@ -12,7 +12,7 @@ spring:
   application:
     name: HrOnline
   jpa:
-    open-in-view: false
+    open-in-view: true
     properties:
       javax:
         persistence:
@@ -42,5 +42,9 @@ spring:
     hibernate:
       ddl-auto: update
       use-new-id-generator-mappings: true
+  servlet:
+    multipart:
+      max-request-size: 200MB
+      max-file-size: 200MB
 server:
   port: 8090

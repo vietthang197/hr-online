@@ -5,6 +5,7 @@ import com.hronline.entity.JobLocation;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -30,4 +31,6 @@ public class CreateJobVM implements Serializable {
     private String corporation;
 
     private boolean urgent;
+    private MultipartFile fileJd;
+    private int vacancies;
 }

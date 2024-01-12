@@ -5,6 +5,7 @@ import com.hronline.dto.PaginationDto;
 import com.hronline.entity.JobLocation;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

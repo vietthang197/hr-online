@@ -1,7 +1,15 @@
+<%@ page import="java.util.List" %>
+<%@ page import="com.hronline.dto.JobInfoDto" %>
+<%@ page import="java.text.NumberFormat" %>
+<%@ page import="java.util.Locale" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
+<%
+    NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+    List<JobInfoDto> jobs = (List<JobInfoDto>) request.getAttribute("jobs");
+%>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,6 +64,7 @@
         </div>
     </form>
     <div class="mt-6 w-full p-2 grid gap-4 md:grid-cols-2">
+        <% for (JobInfoDto job : jobs) {%>
         <div class="flex justify-center">
             <div class="w-full m-2 p-1 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto flex card">
                 <div class="flex">
@@ -66,19 +75,25 @@
                     </div>
                     <div class="w-4/5 p-4 relative">
                         <!-- Urgent -->
+                        <% if (job.isUrgent()) { %>
                         <span class="absolute top-0 right-0 px-2 py-1 text-sm font-semibold text-red-500 bg-red-200 rounded">Urgent</span>
+                        <%}%>
                         <!-- Các thông tin khác trong cột phải -->
-                        <a href="/job-detail" target="_self"
-                           class="text-xl font-bold dark:text-white hover:text-blue-500">Tuyển dụng Java developer
-                            (Techlead)</a>
+                        <a href="/job-detail/<%=job.getId()%>" target="_self"
+                           class="text-xl font-bold dark:text-white hover:text-blue-500"><%= job.getName() %></a>
                         <div class="mt-2">
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">Java</span>
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">Oracle database</span>
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">AWS</span>
+                            <% String[] tagList = new String[0];
+                                if (job.getTags() != null) {
+                                    tagList = job.getTags().split(",");
+                                }
+                            %>
+                            <% for (String tagItem : tagList) {%>
+                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded"><%= tagItem%></span>
+                            <%}%>
                         </div>
-                        <p class="mt-4 text-gray-700 dark:text-white"><span class="font-bold">Mức lương:&nbsp; </span>100$
-                            - 2000$</p>
-                        <p class="text-gray-700 mt-1 mb-4 dark:text-white"><span class="font-bold">Thưởng:&nbsp; </span>$200/Candidate
+                        <p class="mt-4 text-gray-700 dark:text-white"><span class="font-bold">Mức lương:&nbsp; </span> <%= format.format(job.getSalaryFrom())%>
+                            - <%= format.format(job.getSalaryTo())%>  </p>
+                        <p class="text-gray-700 mt-1 mb-4 dark:text-white"><span class="font-bold">Thưởng:&nbsp; </span><%= format.format(job.getReward())%> /Candidate
                         </p>
                         <a href="#"
                            class="absolute bottom-0 right-0 px-4 py-2 text-sm font-semibold text-blue-500 italic underline hover:text-blue-900 dark:text-white dark:hover:text-blue-500">Ứng
@@ -87,161 +102,7 @@
                 </div>
             </div>
         </div>
-        <div class="flex justify-center">
-            <div class="w-full m-2 p-1 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto flex card">
-                <div class="flex">
-                    <div class="w-1/5 p-4">
-                        <!-- Logo -->
-                        <img src="https://static.recruitery.co/uploads/images/08ab20c97c8b4d2783065d01072f0839_20210514101545.jpeg"
-                             alt="Logo" class="w-16 h-16 object-contain">
-                    </div>
-                    <div class="w-4/5 p-4 relative">
-                        <!-- Urgent -->
-                        <span class="absolute top-0 right-0 px-2 py-1 text-sm font-semibold text-red-500 bg-red-200 rounded">Urgent</span>
-                        <!-- Các thông tin khác trong cột phải -->
-                        <a href="/job-detail" target="_self"
-                           class="text-xl font-bold dark:text-white hover:text-blue-500">Tuyển dụng Java developer
-                            (Techlead)</a>
-                        <div class="mt-2 flex flex-wrap gap-2">
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">Java</span>
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">Oracle database</span>
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">AWS</span>
-                        </div>
-                        <p class="mt-4 text-gray-700 dark:text-white"><span class="font-bold">Mức lương:&nbsp; </span>100$
-                            - 2000$</p>
-                        <p class="text-gray-700 mt-1 mb-4 dark:text-white"><span class="font-bold">Thưởng:&nbsp; </span>$200/Candidate
-                        </p>
-                        <a href="#"
-                           class="absolute bottom-0 right-0 px-4 py-2 text-sm font-semibold text-blue-500 italic underline hover:text-blue-900 dark:text-white dark:hover:text-blue-500">Ứng
-                            tuyển ngay</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="flex justify-center">
-            <div class="w-full m-2 p-1 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto flex card">
-                <div class="flex">
-                    <div class="w-1/5 p-4">
-                        <!-- Logo -->
-                        <img src="https://static.recruitery.co/uploads/images/08ab20c97c8b4d2783065d01072f0839_20210514101545.jpeg"
-                             alt="Logo" class="w-16 h-16 object-contain">
-                    </div>
-                    <div class="w-4/5 p-4 relative">
-                        <!-- Urgent -->
-                        <span class="absolute top-0 right-0 px-2 py-1 text-sm font-semibold text-red-500 bg-red-200 rounded">Urgent</span>
-                        <!-- Các thông tin khác trong cột phải -->
-                        <a href="/job-detail" target="_self"
-                           class="text-xl font-bold dark:text-white hover:text-blue-500">Tuyển dụng Java developer
-                            (Techlead)</a>
-                        <div class="mt-2 flex flex-wrap gap-2">
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">Java</span>
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">Oracle database</span>
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">AWS</span>
-                        </div>
-                        <p class="mt-4 text-gray-700 dark:text-white"><span class="font-bold">Mức lương:&nbsp; </span>100$
-                            - 2000$</p>
-                        <p class="text-gray-700 mt-1 mb-4 dark:text-white"><span class="font-bold">Thưởng:&nbsp; </span>$200/Candidate
-                        </p>
-                        <a href="#"
-                           class="absolute bottom-0 right-0 px-4 py-2 text-sm font-semibold text-blue-500 italic underline hover:text-blue-900 dark:text-white dark:hover:text-blue-500">Ứng
-                            tuyển ngay</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="flex justify-center">
-            <div class="w-full m-2 p-1 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto flex card">
-                <div class="flex">
-                    <div class="w-1/5 p-4">
-                        <!-- Logo -->
-                        <img src="https://static.recruitery.co/uploads/images/08ab20c97c8b4d2783065d01072f0839_20210514101545.jpeg"
-                             alt="Logo" class="w-16 h-16 object-contain">
-                    </div>
-                    <div class="w-4/5 p-4 relative">
-                        <!-- Urgent -->
-                        <span class="absolute top-0 right-0 px-2 py-1 text-sm font-semibold text-red-500 bg-red-200 rounded">Urgent</span>
-                        <!-- Các thông tin khác trong cột phải -->
-                        <a href="/job-detail" target="_self"
-                           class="text-xl font-bold dark:text-white hover:text-blue-500">Tuyển dụng Java developer
-                            (Techlead)</a>
-                        <div class="mt-2 flex flex-wrap gap-2">
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">Java</span>
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">Oracle database</span>
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">AWS</span>
-                        </div>
-                        <p class="mt-4 text-gray-700 dark:text-white"><span class="font-bold">Mức lương:&nbsp; </span>100$
-                            - 2000$</p>
-                        <p class="text-gray-700 mt-1 mb-4 dark:text-white"><span class="font-bold">Thưởng:&nbsp; </span>$200/Candidate
-                        </p>
-                        <a href="#"
-                           class="absolute bottom-0 right-0 px-4 py-2 text-sm font-semibold text-blue-500 italic underline hover:text-blue-900 dark:text-white dark:hover:text-blue-500">Ứng
-                            tuyển ngay</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="flex justify-center">
-            <div class="w-full m-2 p-1 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto flex card">
-                <div class="flex">
-                    <div class="w-1/5 p-4">
-                        <!-- Logo -->
-                        <img src="https://static.recruitery.co/uploads/images/08ab20c97c8b4d2783065d01072f0839_20210514101545.jpeg"
-                             alt="Logo" class="w-16 h-16 object-contain">
-                    </div>
-                    <div class="w-4/5 p-4 relative">
-                        <!-- Urgent -->
-                        <span class="absolute top-0 right-0 px-2 py-1 text-sm font-semibold text-red-500 bg-red-200 rounded">Urgent</span>
-                        <!-- Các thông tin khác trong cột phải -->
-                        <a href="/job-detail" target="_self"
-                           class="text-xl font-bold dark:text-white hover:text-blue-500">Tuyển dụng Java developer
-                            (Techlead)</a>
-                        <div class="mt-2 flex flex-wrap gap-2">
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">Java</span>
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">Oracle database</span>
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">AWS</span>
-                        </div>
-                        <p class="mt-4 text-gray-700 dark:text-white"><span class="font-bold">Mức lương:&nbsp; </span>100$
-                            - 2000$</p>
-                        <p class="text-gray-700 mt-1 mb-4 dark:text-white"><span class="font-bold">Thưởng:&nbsp; </span>$200/Candidate
-                        </p>
-                        <a href="#"
-                           class="absolute bottom-0 right-0 px-4 py-2 text-sm font-semibold text-blue-500 italic underline hover:text-blue-900 dark:text-white dark:hover:text-blue-500">Ứng
-                            tuyển ngay</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="flex justify-center">
-            <div class="w-full m-2 p-1 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mx-auto flex card">
-                <div class="flex">
-                    <div class="w-1/5 p-4">
-                        <!-- Logo -->
-                        <img src="https://static.recruitery.co/uploads/images/08ab20c97c8b4d2783065d01072f0839_20210514101545.jpeg"
-                             alt="Logo" class="w-16 h-16 object-contain">
-                    </div>
-                    <div class="w-4/5 p-4 relative">
-                        <!-- Urgent -->
-
-                        <!-- Các thông tin khác trong cột phải -->
-                        <a href="/job-detail" target="_self"
-                           class="text-xl font-bold dark:text-white hover:text-blue-500">Tuyển dụng Java developer
-                            (Techlead)</a>
-                        <div class="mt-2 flex flex-wrap gap-2">
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">Java</span>
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">Oracle database</span>
-                            <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">AWS</span>
-                        </div>
-                        <p class="mt-4 text-gray-700 dark:text-white"><span class="font-bold">Mức lương:&nbsp; </span>100$
-                            - 2000$</p>
-                        <p class="text-gray-700 mt-1 mb-4 dark:text-white"><span class="font-bold">Thưởng:&nbsp; </span>$200/Candidate
-                        </p>
-                        <a href="#"
-                           class="absolute bottom-0 right-0 px-4 py-2 text-sm font-semibold text-blue-500 italic underline hover:text-blue-900 dark:text-white dark:hover:text-blue-500">Ứng
-                            tuyển ngay</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <% } %>
     </div>
     <div class="flex justify-center mt-10">
         <a href="/search-job" target="_self"

@@ -114,6 +114,8 @@
                                         <th>Cần gấp</th>
                                         <th>Ngày tạo</th>
                                         <th>Mô tả công việc</th>
+                                        <th>Số lượng</th>
+                                        <th>File jd</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -208,7 +210,15 @@
                 {"data": "corporation", "render": $.fn.dataTable.render.text()},
                 {"data": "urgent", "render": $.fn.dataTable.render.text()},
                 {"data": "createdDate", "render": $.fn.dataTable.render.text()},
-                {"data": "description", "render": $.fn.dataTable.render.text()}
+                {"data": "description", "render": $.fn.dataTable.render.text()},
+                {"data": "vacancies", "render": $.fn.dataTable.render.text()},
+                {"data": "fileJd", "render": function (data) {
+                        if (data) {
+                            return "<a target='_blank' href='/file/download/"+ data +"'>Tải về</a>"
+                        } else {
+                            return "<p>Không có</p>";
+                        }
+                    }},
             ],
             ajax: {
                 url: "/admin/job/search",
@@ -248,6 +258,8 @@
                             "urgent": responseJson.data[i].urgent,
                             "createdDate": responseJson.data[i].createdDate,
                             "description": responseJson.data[i].description,
+                            "vacancies": responseJson.data[i].vacancies,
+                            "fileJd": responseJson.data[i].fileJd == null ? "" : responseJson.data[i].fileJd.id,
                         })
                     }
 

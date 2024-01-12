@@ -36,7 +36,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.io.IOException;
@@ -64,7 +63,7 @@ public class AdminController {
 
     @GetMapping("/job")
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
-    public String jobList(HttpServletRequest request) {
+    public String jobList(HttpServletRequest request, Model model) {
         return "admin/job/jobList";
     }
 
@@ -89,7 +88,7 @@ public class AdminController {
         }
         try {
             jobService.save(createJobVM);
-        } catch (BindingResultException e) {
+        } catch (BindingResultException | IOException e) {
             bindingResult.reject(String.valueOf(HttpStatus.SC_BAD_REQUEST), e.getMessage());
             return "redirect:/admin/job/create/";
         }
@@ -151,7 +150,6 @@ public class AdminController {
     }
 
     @GetMapping("/corp/edit/{id}")
-    @Transactional
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
     public String editCorp(HttpServletRequest request, HttpServletResponse response, @Valid @NotBlank @PathVariable String id, Model model) throws IOException {
         Optional<Corporation> corporationOptional = corpService.findById(id);
@@ -227,7 +225,6 @@ public class AdminController {
     }
 
     @GetMapping("/corp-industry/edit/{id}")
-    @Transactional
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Corp Industry Resource', 'urn:servlet-authz:protected:admin:industry:edit')")
     public String corpIndustryEdit(HttpServletRequest request, HttpServletResponse response, @Valid @NotBlank @PathVariable String id, Model model) throws IOException {
         Optional<Industry> corpIndustryOptional = industryService.findById(id);

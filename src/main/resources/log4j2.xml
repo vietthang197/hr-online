@@ -16,7 +16,7 @@
 		</RollingFile>
 	</Appenders>
 	<AsyncLoggers>
-		<Root level="INFO">
+		<Root level="ERROR">
 			<AppenderRef ref="api"/>
 			<AppenderRef ref="Console"/>
 		</Root>

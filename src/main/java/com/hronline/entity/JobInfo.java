@@ -51,4 +51,9 @@ public class JobInfo extends SuperEntity implements Serializable {
     private Corporation corporation;
 
     private Boolean urgent = false;
+
+    private int vacancies;
+
+    @OneToOne
+    private FileUploadManagement fileJd;
 }

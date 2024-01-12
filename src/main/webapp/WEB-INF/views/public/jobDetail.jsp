@@ -1,11 +1,16 @@
 <%@ page import="com.hronline.config.Oauth2Security" %>
 <%@ page import="org.springframework.web.servlet.support.RequestContextUtils" %>
 <%@ page import="org.springframework.context.ApplicationContext" %>
+<%@ page import="com.hronline.dto.JobInfoDto" %>
+<%@ page import="java.text.NumberFormat" %>
+<%@ page import="java.util.Locale" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%
     ApplicationContext applicationContext = RequestContextUtils.findWebApplicationContext(request);
     Oauth2Security oauth2Security = (Oauth2Security) applicationContext.getBean("oauth2Security");
+    JobInfoDto job = (JobInfoDto) request.getAttribute("job");
+    NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -45,17 +50,18 @@
     <div class="grid grid-cols-1 md:grid-cols-3 mt-10">
         <div class="md:col-span-2 p-4"> <!-- Cột bên trái -->
             <div class="mt-4">
-                <h1 class="text-2xl font-bold dark:text-white">Marketing Manager</h1>
+                <h1 class="text-2xl font-bold dark:text-white"><%=job.getName()%></h1>
             </div>
             <div class="mt-4">
                 <ul class="flex flex-wrap gap-2">
-                    <li><span class="px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">Java</span></li>
-                    <li><span class="px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">C++</span></li>
-                    <li><span class="px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">Python</span>
-                    </li>
-                    <li><span
-                            class="px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded">Oracle Database</span>
-                    </li>
+                    <% String[] tagList = new String[0];
+                        if (job.getTags() != null) {
+                            tagList = job.getTags().split(",");
+                        }
+                    %>
+                    <% for (String tagItem : tagList) {%>
+                    <li><span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded"><%= tagItem%></span></li>
+                    <%}%>
                 </ul>
             </div>
             <div class="md:col-span-2 mt-4">
@@ -63,74 +69,79 @@
                     <!-- Phần 1 -->
                     <div class="flex flex-col bg-gray-100 p-4 rounded dark:bg-gray-800">
                         <div>
-                            <h3 class="text-lg font-semibold dark:text-white">Phần 1</h3>
+                            <h3 class="text-lg font-semibold dark:text-white">Tên công ty</h3>
                         </div>
                         <div class="flex-grow">
-                            <p class="text-sm dark:text-white">Mô tả phần 1 ăn cơm chưa bạn ơi làm sao để tôi tin bạn
-                                được đây không thể tin nổi đúng không ạ làm sao mà làm dudợc như thế nhỉ</p>
+                            <p class="text-sm dark:text-white"><%=job.getCorporation().getName()%></p>
                         </div>
                     </div>
 
                     <!-- Phần 2 -->
                     <div class="flex flex-col bg-gray-100 p-4 rounded  dark:bg-gray-800">
                         <div>
-                            <h3 class="text-lg font-semibold dark:text-white">Phần 2</h3>
+                            <h3 class="text-lg font-semibold dark:text-white">Số lượng cần tuyển</h3>
                         </div>
                         <div class="flex-grow">
-                            <p class="text-sm dark:text-white">Mô tả phần 2</p>
+                            <p class="text-sm dark:text-white"><%=job.getVacancies()%></p>
                         </div>
                     </div>
 
                     <!-- Phần 3 -->
                     <div class="flex flex-col bg-gray-100 p-4 rounded dark:bg-gray-800">
                         <div>
-                            <h3 class="text-lg font-semibold dark:text-white">Phần 3</h3>
+                            <h3 class="text-lg font-semibold dark:text-white">Nơi làm việc</h3>
                         </div>
                         <div class="flex-grow">
-                            <p class="text-sm dark:text-white">Mô tả phần 3</p>
+                            <p class="text-sm dark:text-white"><%=job.getJobLocation().getName()%></p>
                         </div>
                     </div>
 
                     <!-- Phần 4 -->
                     <div class="flex flex-col bg-gray-100 p-4 rounded dark:bg-gray-800">
                         <div>
-                            <h3 class="text-lg font-semibold dark:text-white">Phần 4</h3>
+                            <h3 class="text-lg font-semibold dark:text-white">Mức lương</h3>
                         </div>
                         <div class="flex-grow">
-                            <p class="text-sm dark:text-white">Mô tả phần 4</p>
+                            <p class="text-sm dark:text-white">
+                                <%= format.format(job.getSalaryFrom())%>
+                                - <%= format.format(job.getSalaryTo())%>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="md:col-span-2 border-b border-dashed m-4 "></div>
             <div>
-                <h3 class="text-lg font-semibold dark:text-white">Phần 4</h3>
+                <h3 class="text-lg font-semibold dark:text-white">Mô tả công việc</h3>
             </div>
             <div class="md:col-span-2 mt-4">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <!-- Phần 1 -->
                     <div class="flex flex-col bg-gray-100 p-4 rounded dark:bg-gray-800">
                         <div class="flex-grow">
-                            <p class="text-sm dark:text-white">Mô tả phần 1 ăn cơm chưa bạn ơi làm sao để tôi tin bạn
-                                được đây không thể tin nổi đúng không ạ làm sao mà làm dudợc như thế nhỉ</p>
+                            <p class="text-sm dark:text-white">
+                                <%=job.getDescription()%>
+                            </p>
                         </div>
                     </div>
 
                     <!-- Phần 2 -->
                     <div class="flex flex-col bg-gray-100 p-4 rounded dark:bg-gray-800">
                         <div class="flex-grow">
-                            <p class="text-sm dark:text-white">Mô tả phần 2</p>
+                            <p class="text-sm dark:text-white">
+                                Mức độ: <%=job.isUrgent()? "Cần gấp" : "Bình thường"%>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="md:col-span-2 border-b border-dashed m-4"></div>
-            <div class="mt-4">
-                <h3 class="font-bold dark:text-white">Tổng quan về công việc và trách nhiệm</h3>
-                <div class="mt-2 dark:bg-gray-800">
-                    <p class="text-sm dark:text-white">Giới thiệu về LangGo</p>
-                </div>
-            </div>
+<%--            <div class="md:col-span-2 border-b border-dashed m-4"></div>--%>
+<%--            <div class="mt-4">--%>
+<%--                <h3 class="font-bold dark:text-white">Tổng quan về công việc và trách nhiệm</h3>--%>
+<%--                <div class="mt-2 dark:bg-gray-800">--%>
+<%--                    <p class="text-sm dark:text-white">Giới thiệu về LangGo</p>--%>
+<%--                </div>--%>
+<%--            </div>--%>
             <div class="md:col-span-2 border-b border-dashed m-4"></div>
             <div class="mt-4">
                 <h1 class="font-bold text-xl dark:text-white">Các vị trí tương tự</h1>

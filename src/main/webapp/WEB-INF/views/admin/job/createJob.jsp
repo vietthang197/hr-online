@@ -128,7 +128,7 @@
             </div>
             <%}%>
             <div class="container-fluid">
-                <form action="/admin/job/create" method="POST">
+                <form action="${pageContext.request.contextPath}/admin/job/create" method="POST" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -188,6 +188,18 @@
                             </div>
                             <!-- /.form-group -->
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="vacancies">Số lượng tuyển: <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="vacancies" name="vacancies">
+                            </div>
+                            <!-- /.form-group -->
+                            <div class="form-group">
+                                <label for="fileJd">File Job detail: <span class="text-danger">*</span></label>
+                                <input type="file" class="form-control" id="fileJd" name="fileJd">
+                            </div>
+                            <!-- /.form-group -->
+                        </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="description">Mô tả công việc</label>
@@ -198,7 +210,7 @@
                         <!-- /.col -->
                     </div>
                     <% if (oauth2Security.hasResourcePermission(request, "Admin Resource", "urn:servlet-authz:protected:admin:access")) { %>
-                    <button type="submit" class="btn btn-primary btn-sm">Thêm</button>
+                    <button type="submit" class="btn btn-primary">Thêm</button>
                     <%}%>
                 </form>
                 <!-- /.row -->
@@ -230,8 +242,8 @@
 <script src="/resources/adminlte/js/adminlte.js"></script>
 <script src="/resources/js/select2.min.js"></script>
 <script>
-    $(".alert-msg").fadeTo(2000, 500).slideUp(500, function(){
-        $(".alert-msg").slideUp(500);
+    $(".alert-msg").fadeTo(2000, 50000).slideUp(50000, function(){
+        $(".alert-msg").slideUp(50000);
     });
 </script>
 <script>
