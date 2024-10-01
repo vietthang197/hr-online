@@ -1,7 +1,10 @@
+<%@ page import="com.hronline.dto.JobLocationDto" %>
+<%@ page import="java.util.List" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
+<% List<JobLocationDto> locations = (List<JobLocationDto>) request.getAttribute("locations"); %>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -90,10 +93,10 @@
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
         <div class="col-lg-3 col-md-3 col-sm-6 col-6 searcher-filter-item searcher-filter-select-multi">
             <select class="select2 custom-select2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option value="option1">Tất cả khu vực</option>
-                <option value="option1">Option 1</option>
-                <option value="option2">Option 2</option>
-                <option value="option3">Option 3</option>
+                <option>Tất cả khu vực</option>
+                <% for (JobLocationDto location : locations) { %>
+                <option value="<%=location.getId()%>"><%=location.getName()%></option>
+                <%}%>
             </select>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-6 col-6 searcher-filter-item searcher-filter-select-multi">

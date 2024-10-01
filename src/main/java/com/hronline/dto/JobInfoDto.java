@@ -23,9 +23,14 @@ public class JobInfoDto implements Serializable {
     private String id;
     private String name;
     private String tags;
+    private String jobType;
+    private Boolean negotiable;
     private BigDecimal salaryFrom;
+    private String salaryFromCurrency;
     private BigDecimal salaryTo;
+    private String salaryToCurrency;
     private BigDecimal reward;
+    private String rewardCurrency;
     private JobLocationDto jobLocation;
     private String description;
     private CorporationDto corporation;

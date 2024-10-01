@@ -25,7 +25,7 @@ public class SearchEngineConfiguration implements CommandLineRunner {
     @Transactional
     public void run(String... args) throws Exception {
         SearchSession searchSession = Search.session(entityManager);
-        searchSession.massIndexer(Corporation.class, FileUploadConfig.class, FileUploadManagement.class, Industry.class, JobInfo.class, JobLocation.class, JobTitle.class).startAndWait();
+        searchSession.massIndexer(Corporation.class, FileUploadConfig.class, FileUploadManagement.class, Industry.class, JobInfo.class, JobLocation.class, JobTitle.class, ResumeInfo.class).startAndWait();
     }
 }
 

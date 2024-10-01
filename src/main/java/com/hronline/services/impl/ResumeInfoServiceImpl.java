@@ -1,14 +1,14 @@
 package com.hronline.services.impl;
 
-import com.hronline.dto.BasicResponseDto;
-import com.hronline.dto.FileUploadManagementDto;
-import com.hronline.dto.PaginationDto;
-import com.hronline.dto.ResumeInfoDto;
+import com.hronline.dto.*;
 import com.hronline.entity.FileUploadManagement;
 import com.hronline.entity.Industry;
 import com.hronline.entity.JobInfo;
 import com.hronline.entity.ResumeInfo;
 import com.hronline.exception.BindingResultException;
+import com.hronline.mapper.FileUploadManagementMapper;
+import com.hronline.mapper.JobLocationMapper;
+import com.hronline.mapper.ResumeInfoMapper;
 import com.hronline.repository.FileUploadManagementRepository;
 import com.hronline.repository.JobRepository;
 import com.hronline.repository.ResumeInfoRepository;
@@ -35,6 +35,9 @@ public class ResumeInfoServiceImpl implements ResumeInfoService {
     private final FileUploadManagementRepository fileUploadManagementRepository;
     private final JobRepository jobRepository;
     private final CommonSearchService<ResumeInfo, ResumeSearchVM> commonSearchService;
+    private final ResumeInfoMapper resumeInfoMapper;
+    private final JobLocationMapper jobLocationMapper;
+    private final FileUploadManagementMapper fileUploadManagementMapper;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
@@ -69,6 +72,8 @@ public class ResumeInfoServiceImpl implements ResumeInfoService {
     @Override
     @Transactional
     public BasicResponseDto<PaginationDto<ResumeInfoDto>> search(ResumeSearchVM searchVM) {
-        return null;
+        PaginationDto<ResumeInfo> resumeInfoPaginationDto = commonSearchService.searchData(searchVM, ResumeInfo.class);
+        PaginationDto<ResumeInfoDto> resumeInfoPaging = ResumeInfoMapper.toPaginationDto(resumeInfoPaginationDto, jobLocationMapper, fileUploadManagementMapper);
+        return BasicResponseDto.ok(resumeInfoPaging);
     }
 }

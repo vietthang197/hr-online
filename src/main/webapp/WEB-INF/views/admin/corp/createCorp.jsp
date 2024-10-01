@@ -171,7 +171,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="description">Mô tả công ty</label>
-                                <textarea rows="4" class="form-control" id="description" name="description"
+                                <textarea rows="4" class="form-control ckeditor" id="description" name="description"
                                           placeholder=""></textarea>
                             </div>
                         </div>
@@ -209,6 +209,8 @@
 <!-- AdminLTE -->
 <script src="/resources/adminlte/js/adminlte.js"></script>
 <script src="/resources/js/select2.min.js"></script>
+<script src="/resources/js/ckeditor/ckeditor.js"></script>
+<script src="/resources/js/ckeditor/adapters/jquery.js"></script>
 <script>
     $(".alert-msg").fadeTo(2000, 500).slideUp(500, function(){
         $(".alert-msg").slideUp(500);

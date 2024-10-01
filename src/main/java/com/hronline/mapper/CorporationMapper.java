@@ -11,8 +11,11 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface CorporationMapper {
-    default CorporationDto toDto(Corporation corporation) {
-        return CorporationDto.builder()
+    static CorporationDto toDto(Corporation corporation) {
+        if (corporation == null)
+            return null;
+        else
+            return CorporationDto.builder()
                 .id(corporation.getId())
                 .name(corporation.getName())
                 .taxId(corporation.getTaxId())
@@ -24,11 +27,11 @@ public interface CorporationMapper {
                 .build();
     }
 
-    default List<CorporationDto> toListDto(List<Corporation> corporationList) {
-        return corporationList.parallelStream().map(this::toDto).collect(Collectors.toList());
+    static List<CorporationDto> toListDto(List<Corporation> corporationList) {
+        return corporationList.parallelStream().map(CorporationMapper::toDto).collect(Collectors.toList());
     }
 
-    default PaginationDto<CorporationDto> toPaginationDto(PaginationDto<Corporation> corporationPaginationDto) {
+    static PaginationDto<CorporationDto> toPaginationDto(PaginationDto<Corporation> corporationPaginationDto) {
         PaginationDto<CorporationDto> paginationDto = new PaginationDto<>();
         paginationDto.setDraw(corporationPaginationDto.getDraw());
         paginationDto.setRecordsFiltered(corporationPaginationDto.getRecordsFiltered());

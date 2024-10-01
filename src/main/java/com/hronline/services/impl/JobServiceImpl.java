@@ -71,8 +71,13 @@ public class JobServiceImpl implements JobService {
                 .name(request.getName())
                 .tags(request.getTags())
                 .salaryFrom(request.getSalaryFrom())
+                .salaryFromCurrency(request.getSalaryFromCurrency())
                 .salaryTo(request.getSalaryTo())
+                .salaryToCurrency(request.getSalaryToCurrency())
                 .reward(request.getReward())
+                .rewardCurrency(request.getRewardCurrency())
+                .jobType(request.getJobType())
+                .negotiable(request.isNegotiable())
                 .jobLocation(locationOptional.get())
                 .corporation(corporationOptional.get())
                 .description(request.getDescription())
@@ -97,7 +102,7 @@ public class JobServiceImpl implements JobService {
     public List<JobInfoDto> findLatestJob(int limit) {
         PageRequest pageRequest = PageRequest.of(0, 6, Sort.by("createdDate").descending());
         List<JobInfo> jobInfos = jobRepository.findAll(pageRequest).get().collect(Collectors.toList());
-        return jobInfoMapper.toListDto(jobInfos, jobLocationMapper, corporationMapper);
+        return jobInfoMapper.toListDto(jobInfos, jobLocationMapper);
     }
 
     @Override
@@ -106,6 +111,6 @@ public class JobServiceImpl implements JobService {
         Optional<JobInfo> jobInfoOptional = jobRepository.findById(jobId);
         if (jobInfoOptional.isEmpty())
             throw new BindingResultException("Job khong ton tai");
-        return jobInfoMapper.toDto(jobInfoOptional.get(), jobLocationMapper, corporationMapper);
+        return JobInfoMapper.toDto(jobInfoOptional.get(), jobLocationMapper);
     }
 }

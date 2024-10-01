@@ -7,7 +7,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <%
-    NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+    NumberFormat format = NumberFormat.getInstance();
     List<JobInfoDto> jobs = (List<JobInfoDto>) request.getAttribute("jobs");
 %>
 <head>
@@ -76,7 +76,7 @@
                     <div class="w-4/5 p-4 relative">
                         <!-- Urgent -->
                         <% if (job.isUrgent()) { %>
-                        <span class="absolute top-0 right-0 px-2 py-1 text-sm font-semibold text-red-500 bg-red-200 rounded">Urgent</span>
+                        <span class="absolute top-0 right-0 px-2 py-1 text-sm font-semibold text-red-500 bg-red-200 rounded">Tuyển gấp</span>
                         <%}%>
                         <!-- Các thông tin khác trong cột phải -->
                         <a href="/job-detail/<%=job.getId()%>" target="_self"
@@ -91,12 +91,17 @@
                             <span class="inline-block px-2 py-1 text-sm font-semibold text-gray-800 bg-gray-200 rounded"><%= tagItem%></span>
                             <%}%>
                         </div>
-                        <p class="mt-4 text-gray-700 dark:text-white"><span class="font-bold">Mức lương:&nbsp; </span> <%= format.format(job.getSalaryFrom())%>
-                            - <%= format.format(job.getSalaryTo())%>  </p>
-                        <p class="text-gray-700 mt-1 mb-4 dark:text-white"><span class="font-bold">Thưởng:&nbsp; </span><%= format.format(job.getReward())%> /Candidate
+                        <p class="mt-4 text-gray-700 dark:text-white"><span class="font-bold">Mức lương:&nbsp; </span>
+                         <span>
+                             <% if(job.getNegotiable()) {%>
+                                <span>Thoả thuận</span>
+                             <% } else { %>
+                             <span><%= format.format(job.getSalaryFrom())%> <%= job.getSalaryFromCurrency() %> - <%= format.format(job.getSalaryTo())%> <%= job.getSalaryToCurrency()%> </span>
+                             <% } %>
+                         </span>
                         </p>
                         <a href="#"
-                           class="absolute bottom-0 right-0 px-4 py-2 text-sm font-semibold text-blue-500 italic underline hover:text-blue-900 dark:text-white dark:hover:text-blue-500">Ứng
+                           class="absolute bottom-0 right-0 px-4 text-sm font-semibold text-blue-500 italic underline hover:text-blue-900 dark:text-white dark:hover:text-blue-500">Ứng
                             tuyển ngay</a>
                     </div>
                 </div>

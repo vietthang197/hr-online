@@ -105,7 +105,7 @@ public class AdminController {
         return jobService.search(searchVM);
     }
 
-    @GetMapping("/employee")
+    @GetMapping("/resume-data")
     @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
     public String employeeList(HttpServletRequest request) {
         return "admin/resume/resumableList";

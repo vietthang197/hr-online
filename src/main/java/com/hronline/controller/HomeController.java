@@ -2,6 +2,7 @@ package com.hronline.controller;
 
 import com.hronline.dto.JobInfoDto;
 import com.hronline.exception.BindingResultException;
+import com.hronline.services.JobLocationService;
 import com.hronline.services.JobService;
 import com.hronline.services.ResumeInfoService;
 import com.hronline.vm.resume.CreateResumeVM;
@@ -25,6 +26,7 @@ public class HomeController {
 
     private final JobService jobService;
     private final ResumeInfoService resumeInfoService;
+    private final JobLocationService jobLocationService;
 
     @GetMapping("/")
     public String homePage(Model model) {
@@ -41,7 +43,8 @@ public class HomeController {
     }
 
     @GetMapping("/search-job")
-    public String searchJob() {
+    public String searchJob(Model model) {
+        model.addAttribute("locations", jobLocationService.findAll());
         return "public/searchJob";
     }
 

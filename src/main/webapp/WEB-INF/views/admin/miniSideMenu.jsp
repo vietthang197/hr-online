@@ -13,7 +13,7 @@
     <a href="/admin" class="brand-link">
         <img src="/resources/logo.svg" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
              style="opacity: .8">
-        <span class="brand-text font-weight-light">HR Online</span>
+        <span class="brand-text font-weight-light">Tìm việc Online</span>
     </a>
 
     <!-- Sidebar -->

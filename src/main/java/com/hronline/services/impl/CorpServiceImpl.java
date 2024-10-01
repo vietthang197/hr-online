@@ -57,7 +57,7 @@ public class CorpServiceImpl implements CorpService {
     @Transactional
     public BasicResponseDto<PaginationDto<CorporationDto>> search(CorpSearchVM searchVM) {
         PaginationDto<Corporation> corporationPagination = commonSearchService.searchData(searchVM, Corporation.class);
-        PaginationDto<CorporationDto> response = corporationMapper.toPaginationDto(corporationPagination);
+        PaginationDto<CorporationDto> response = CorporationMapper.toPaginationDto(corporationPagination);
         return BasicResponseDto.ok(response);
     }
 
@@ -109,6 +109,6 @@ public class CorpServiceImpl implements CorpService {
     @Override
     @Transactional
     public List<CorporationDto> findAll() {
-        return corporationMapper.toListDto(corporationRepository.findAll());
+        return CorporationMapper.toListDto(corporationRepository.findAll());
     }
 }

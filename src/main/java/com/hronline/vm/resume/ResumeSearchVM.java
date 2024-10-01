@@ -17,9 +17,12 @@ public class ResumeSearchVM extends BaseObjPagination implements Serializable {
     @SearchColumn(columnName = "id", searchType = SearchType.MATCH, dataType = DataType.STRING)
     private String id;
 
-    @SearchColumn(columnName = "id", searchType = SearchType.MATCH, dataType = DataType.STRING)
+    @SearchColumn(columnName = "applicantPhone", searchType = SearchType.MATCH, dataType = DataType.STRING)
     private String applicantPhone;
 
-    @SearchColumn(columnName = "id", searchType = SearchType.MATCH, dataType = DataType.STRING)
+    @SearchColumn(columnName = "applicantEmail", searchType = SearchType.MATCH, dataType = DataType.STRING)
     private String applicationEmail;
+
+    @SearchColumn(columnName = "jobInfo.id", searchType = SearchType.MATCH, dataType = DataType.STRING)
+    private String jobId;
 }

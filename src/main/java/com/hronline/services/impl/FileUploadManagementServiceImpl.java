@@ -50,7 +50,7 @@ public class FileUploadManagementServiceImpl implements FileUploadManagementServ
         }
 
         String newFileName = UUID.randomUUID() + "." + FilenameUtils.getExtension(file.getOriginalFilename());
-        String newFilePath = dataPath + File.pathSeparator + newFileName;
+        String newFilePath = dataPath + "/" + newFileName;
 
         try (
              BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(newFilePath));

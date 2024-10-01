@@ -9,6 +9,7 @@ import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -43,6 +44,7 @@ public class Corporation extends SuperEntity implements Serializable {
     @ToString.Exclude
     @JsonIgnore
     @BatchSize(size = 20)
+    @IndexedEmbedded
     private Set<Industry> industries = new HashSet<>();
 
     // Địa chỉ công ty
@@ -69,4 +71,10 @@ public class Corporation extends SuperEntity implements Serializable {
     @Column(length = 1500)
     @FullTextField(analyzer = "customAnalyzer")
     private String description;
+
+    @OneToMany(mappedBy = "corporation")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
+    private Set<JobInfo> jobInfoList;
 }

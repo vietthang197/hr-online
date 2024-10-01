@@ -138,37 +138,8 @@
                             </div>
                             <!-- /.form-group -->
                             <div class="form-group">
-                                <label for="tags">Nhãn dán (Cách nhau bởi dấu phẩy) <span class="text-danger">*</span></label>
+                                <label for="tags">Hashtag (Cách nhau bởi dấu phẩy) <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="tags" name="tags" placeholder="">
-                            </div>
-                            <!-- /.form-group -->
-                        </div>
-                        <!-- /.col -->
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="salaryFrom">Mức lương thấp nhất <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" id="salaryFrom" name="salaryFrom" placeholder="">
-                            </div>
-                            <!-- /.form-group -->
-                            <div class="form-group">
-                                <label for="salaryTo">Mức lương cao nhất <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" id="salaryTo" name="salaryTo" placeholder="">
-                            </div>
-                            <!-- /.form-group -->
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="reward">Hoa hồng <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" id="reward" name="reward" placeholder="">
-                            </div>
-                            <!-- /.form-group -->
-                            <div class="form-group">
-                                <label for="corporation">Đăng cho công ty</label>
-                                <select class="form-control" id="corporation" name="corporation">
-                                    <%for (CorporationDto corp : corporations) {%>
-                                    <option value="<%=corp.getId()%>"><%=corp.getName()%></option>
-                                    <%}%>
-                                </select>
                             </div>
                             <!-- /.form-group -->
                         </div>
@@ -188,22 +159,112 @@
                             </div>
                             <!-- /.form-group -->
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="vacancies">Số lượng tuyển: <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control" id="vacancies" name="vacancies">
+                        <!-- /.col -->
+                        <div class="col-md-12">
+                            <label for="negotiable">Lương thoả thuận</label>
+                            <input type="checkbox" name="negotiable" id="negotiable">
+                            <div class="row" id="salaryToGroup">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="salaryFrom">Mức lương thấp nhất <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="salaryFrom" name="salaryFrom" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="salaryFromCurrency">Đơn vị tiền <span class="text-danger">*</span></label>
+                                        <select  class="form-control" id="salaryFromCurrency" name="salaryFromCurrency">
+                                            <option value="VND" selected>VND</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                            <!-- /.form-group -->
-                            <div class="form-group">
-                                <label for="fileJd">File Job detail: <span class="text-danger">*</span></label>
-                                <input type="file" class="form-control" id="fileJd" name="fileJd">
+                            <div class="row" id="salaryFromGroup">
+                                <div class="col-md-8">
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        <label for="salaryTo">Mức lương cao nhất <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="salaryTo" name="salaryTo" placeholder="">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="salaryToCurrency">Đơn vị tiền <span class="text-danger">*</span></label>
+                                        <select  class="form-control" id="salaryToCurrency" name="salaryToCurrency">
+                                            <option value="VND" selected>VND</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="reward">Hoa hồng <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="reward" name="reward" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="rewardCurrency">Đơn vị tiền <span class="text-danger">*</span></label>
+                                        <select  class="form-control" id="rewardCurrency" name="rewardCurrency">
+                                            <option value="VND" selected>VND</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="corporation">Đăng cho công ty</label>
+                                        <select class="form-control" id="corporation" name="corporation">
+                                            <%for (CorporationDto corp : corporations) {%>
+                                            <option value="<%=corp.getId()%>"><%=corp.getName()%></option>
+                                            <%}%>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="vacancies">Số lượng tuyển: <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="vacancies" name="vacancies">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        <label for="fileJd">File Job detail: <span class="text-danger">*</span></label>
+                                        <input type="file" class="form-control" id="fileJd" name="fileJd">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        <label for="fileJd">Loại Job <span class="text-danger">*</span></label>
+                                        <select class="form-control" id="jobType" name="jobType">
+                                            <option value="inoffice" selected>In Office</option>
+                                            <option value="onsite">Onsite</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <!-- /.form-group -->
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="description">Mô tả công việc</label>
-                                <textarea rows="4" class="form-control" id="description" name="description"
+                                <textarea rows="4" class="form-control ckeditor" id="description" name="description"
                                           placeholder=""></textarea>
                             </div>
                         </div>
@@ -241,6 +302,8 @@
 <!-- AdminLTE -->
 <script src="/resources/adminlte/js/adminlte.js"></script>
 <script src="/resources/js/select2.min.js"></script>
+<script src="/resources/js/ckeditor/ckeditor.js"></script>
+<script src="/resources/js/ckeditor/adapters/jquery.js"></script>
 <script>
     $(".alert-msg").fadeTo(2000, 50000).slideUp(50000, function(){
         $(".alert-msg").slideUp(50000);
@@ -251,6 +314,20 @@
         $('#industries').select2({
             multiple: true
         });
+
+        $('#negotiable').change(function (event) {
+            if (this.checked) {
+                $('#salaryFrom').prop('disabled', true);
+                $('#salaryFromCurrency').prop('disabled', true);
+                $('#salaryTo').prop('disabled', true);
+                $('#salaryToCurrency').prop('disabled', true);
+            } else {
+                $('#salaryFrom').prop('disabled', false);
+                $('#salaryFromCurrency').prop('disabled', false);
+                $('#salaryTo').prop('disabled', false);
+                $('#salaryToCurrency').prop('disabled', false);
+            }
+        })
     });
 </script>
 </body>

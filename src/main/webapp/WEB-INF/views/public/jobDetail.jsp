@@ -10,7 +10,7 @@
     ApplicationContext applicationContext = RequestContextUtils.findWebApplicationContext(request);
     Oauth2Security oauth2Security = (Oauth2Security) applicationContext.getBean("oauth2Security");
     JobInfoDto job = (JobInfoDto) request.getAttribute("job");
-    NumberFormat format = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+    NumberFormat format = NumberFormat.getInstance();
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +50,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 mt-10">
         <div class="md:col-span-2 p-4"> <!-- Cột bên trái -->
             <div class="mt-4">
-                <h1 class="text-2xl font-bold dark:text-white"><%=job.getName()%></h1>
+                <h1 class="text-2xl font-bold dark:text-white"><%=job.getName()%> <span class="text-red-600"><%=job.isUrgent()? "(Tuyển gấp)" : ""%></span></h1>
             </div>
             <div class="mt-4">
                 <ul class="flex flex-wrap gap-2">
@@ -103,8 +103,13 @@
                         </div>
                         <div class="flex-grow">
                             <p class="text-sm dark:text-white">
-                                <%= format.format(job.getSalaryFrom())%>
-                                - <%= format.format(job.getSalaryTo())%>
+                                <span>
+                             <% if(job.getNegotiable()) {%>
+                                <span>Thoả thuận</span>
+                             <% } else { %>
+                             <span><%= format.format(job.getSalaryFrom())%> <%= job.getSalaryFromCurrency() %> - <%= format.format(job.getSalaryTo())%> <%= job.getSalaryToCurrency()%> </span>
+                             <% } %>
+                         </span>
                             </p>
                         </div>
                     </div>
@@ -114,34 +119,11 @@
             <div>
                 <h3 class="text-lg font-semibold dark:text-white">Mô tả công việc</h3>
             </div>
-            <div class="md:col-span-2 mt-4">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Phần 1 -->
-                    <div class="flex flex-col bg-gray-100 p-4 rounded dark:bg-gray-800">
-                        <div class="flex-grow">
-                            <p class="text-sm dark:text-white">
-                                <%=job.getDescription()%>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Phần 2 -->
-                    <div class="flex flex-col bg-gray-100 p-4 rounded dark:bg-gray-800">
-                        <div class="flex-grow">
-                            <p class="text-sm dark:text-white">
-                                Mức độ: <%=job.isUrgent()? "Cần gấp" : "Bình thường"%>
-                            </p>
-                        </div>
-                    </div>
+            <div class="md:col-span-1 mt-4">
+                <div class="text-sm dark:text-white">
+                    <%=job.getDescription()%>
                 </div>
             </div>
-<%--            <div class="md:col-span-2 border-b border-dashed m-4"></div>--%>
-<%--            <div class="mt-4">--%>
-<%--                <h3 class="font-bold dark:text-white">Tổng quan về công việc và trách nhiệm</h3>--%>
-<%--                <div class="mt-2 dark:bg-gray-800">--%>
-<%--                    <p class="text-sm dark:text-white">Giới thiệu về LangGo</p>--%>
-<%--                </div>--%>
-<%--            </div>--%>
             <div class="md:col-span-2 border-b border-dashed m-4"></div>
             <div class="mt-4">
                 <h1 class="font-bold text-xl dark:text-white">Các vị trí tương tự</h1>
@@ -178,12 +160,6 @@
             </div>
         </div>
         <div class="md:col-span-1 md:order-last order-first md:flex md:flex-col rounded border p-2 m-2 dark:border-gray-400">
-            <!-- Cột bên phải -->
-            <div class="mt-4">
-                <h1 class="text-xl font-semibold dark:text-white">Thưởng</h1>
-                <h3 class="text-lg font-semibold dark:text-white">160000$/ Candidate</h3>
-            </div>
-            <div class="mt-4 border-b border-dashed w-full"></div> <!-- Dòng kẻ ngang -->
             <div class="mt-4">
                 <div class="grid grid-cols-2 gap-4">
                     <a <%=job.getFileJd() != null ? "disabled" : ""%> href="<%=job.getFileJd() == null ? "#" : "/file/download/" + job.getFileJd().getId()%>" target="_blank" class="border border-blue-500 bg-white text-blue-500 font-semibold rounded-md py-2 px-4 flex items-center justify-center hover:border-blue-600 hover:text-blue-600">
@@ -224,20 +200,20 @@
                 <div class="p-6">
                     <form action="${pageContext.request.contextPath}/submit-resume" method="post" enctype="multipart/form-data" onsubmit="submitFile($event)">
                         <div class="mb-6">
-                            <label for="fullName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Họ và tên</label>
-                            <input type="text" id="fullName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Điền tên của bạn" required>
+                            <label for="applicantName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Họ và tên</label>
+                            <input type="text" id="applicantName" name="applicantName" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Điền tên của bạn" required>
                         </div>
                         <div class="mb-6">
-                            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                            <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@flowbite.com" required>
+                            <label for="applicantEmail" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                            <input type="email" id="applicantEmail" name="applicantEmail" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@flowbite.com" required>
                         </div>
                         <div class="mb-6">
-                            <label for="facebook" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Link facebook</label>
-                            <input type="text" id="facebook" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="https://facebook.com" required>
+                            <label for="applicantFbLink" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Link facebook</label>
+                            <input type="text" id="applicantFbLink" name="applicantFbLink" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="https://facebook.com" required>
                         </div>
                         <div class="mb-6">
-                            <label for="phone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Số điện thoại liên hệ</label>
-                            <input type="tel" id="phone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required>
+                            <label for="applicantPhone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Số điện thoại liên hệ</label>
+                            <input type="tel" id="applicantPhone" name="applicantPhone" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="" required>
                         </div>
                         <div class="w-full h-64 flex items-center justify-center bg-gray-100 rounded-lg border-2 border-dashed border-gray-400 cursor-pointer">
                             <label for="fileResume" class="flex flex-col items-center">
@@ -247,6 +223,9 @@
                                 <span id="fileLabel" class="text-sm text-gray-600 text-center">Kéo và thả hoặc chọn CV (doc, docx, pdf tối đa 5MB)</span>
                                 <input id="fileResume" name="fileResume" onchange="updateFileName(this)" type="file" class="hidden">
                             </label>
+                        </div>
+                        <div>
+                            <input type="text" name="jobId" id="jobId" value="<%=job.getId()%>" class="hidden" hidden="hidden">
                         </div>
                         <div class="flex flex-col items-center justify-center mt-4">
                             <div class="w-full max-w-xs">

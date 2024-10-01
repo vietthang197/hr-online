@@ -14,18 +14,23 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface JobInfoMapper {
-    default JobInfoDto toDto(JobInfo jobInfo, JobLocationMapper jobLocationMapper, CorporationMapper corporationMapper) {
+    static JobInfoDto toDto(JobInfo jobInfo, JobLocationMapper jobLocationMapper) {
         FileUploadManagement fileJd = jobInfo.getFileJd();
         return JobInfoDto.builder()
                 .id(jobInfo.getId())
                 .name(jobInfo.getName())
                 .tags(jobInfo.getTags())
+                .jobType(jobInfo.getJobType())
+                .negotiable(jobInfo.getNegotiable())
                 .salaryFrom(jobInfo.getSalaryFrom())
+                .salaryFromCurrency(jobInfo.getSalaryFromCurrency())
                 .salaryTo(jobInfo.getSalaryTo())
+                .salaryToCurrency(jobInfo.getSalaryToCurrency())
                 .reward(jobInfo.getReward())
+                .rewardCurrency(jobInfo.getRewardCurrency())
                 .jobLocation(jobLocationMapper.toDto(jobInfo.getJobLocation()))
                 .description(jobInfo.getDescription())
-                .corporation(corporationMapper.toDto(jobInfo.getCorporation()))
+                .corporation(CorporationMapper.toDto(jobInfo.getCorporation()))
                 .urgent(jobInfo.getUrgent())
                 .createdDate(DateUtils.fromDate(jobInfo.getCreatedDate(), DateUtils.DEFAULT_DATE_FORMAT))
                 .vacancies(jobInfo.getVacancies())
@@ -38,8 +43,8 @@ public interface JobInfoMapper {
                 )
                 .build();
     };
-    default List<JobInfoDto> toListDto(List<JobInfo> jobInfos, JobLocationMapper jobLocationMapper, CorporationMapper corporationMapper) {
-        return jobInfos.parallelStream().map(jobInfo -> toDto(jobInfo, jobLocationMapper, corporationMapper)).collect(Collectors.toList());
+    default List<JobInfoDto> toListDto(List<JobInfo> jobInfos, JobLocationMapper jobLocationMapper) {
+        return jobInfos.parallelStream().map(jobInfo -> toDto(jobInfo, jobLocationMapper)).collect(Collectors.toList());
     };
     default PaginationDto<JobInfoDto> toPaginationDto(PaginationDto<JobInfo> jobInfoPaginationDto, JobLocationMapper jobLocationMapper, CorporationMapper corporationMapper) {
         PaginationDto<JobInfoDto> paginationDto = new PaginationDto<>();
@@ -47,7 +52,7 @@ public interface JobInfoMapper {
         paginationDto.setRecordsFiltered(jobInfoPaginationDto.getRecordsFiltered());
         paginationDto.setRecordsTotal(jobInfoPaginationDto.getRecordsTotal());
         List<JobInfo> jobInfos = jobInfoPaginationDto.getData();
-        paginationDto.setData(toListDto(jobInfos, jobLocationMapper, corporationMapper));
+        paginationDto.setData(toListDto(jobInfos, jobLocationMapper));
         return paginationDto;
     };
 

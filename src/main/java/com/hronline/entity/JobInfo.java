@@ -38,12 +38,23 @@ public class JobInfo extends SuperEntity implements Serializable {
     @FullTextField(analyzer = "customAnalyzer")
     private String tags;
 
+    private String jobType;
+
+    private Boolean negotiable; // luong thoa thuan hay khong
+
     @GenericField
     private BigDecimal salaryFrom;
+
+    private String salaryFromCurrency;
+
     @GenericField
     private BigDecimal salaryTo;
 
+    private String salaryToCurrency;
+
     private BigDecimal reward;
+
+    private String rewardCurrency;
 
     @OneToOne
     private JobLocation jobLocation;
@@ -51,7 +62,12 @@ public class JobInfo extends SuperEntity implements Serializable {
     @Lob
     private String description;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "corporation_id", referencedColumnName = "id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
+    @IndexedEmbedded
     private Corporation corporation;
 
     private Boolean urgent = false;
@@ -59,6 +75,7 @@ public class JobInfo extends SuperEntity implements Serializable {
     private int vacancies;
 
     @OneToOne
+    @JoinColumn(name = "file_jd_id", referencedColumnName = "id")
     private FileUploadManagement fileJd;
 
     @OneToMany(mappedBy = "jobInfo")
