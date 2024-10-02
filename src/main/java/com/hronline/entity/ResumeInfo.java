@@ -1,5 +1,6 @@
 package com.hronline.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.search.engine.backend.types.Sortable;
@@ -47,5 +48,12 @@ public class ResumeInfo extends SuperEntity implements Serializable {
     @IndexedEmbedded
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id", referencedColumnName = "id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @JsonIgnore
     private JobInfo jobInfo;
+
+    private String resumeStatus; // chua xu ly, dang cho cong ty phan hoi, bi cong ty tu choi, bi hr tu choi, duoc cong ty chap nhan
+
+    private String isDeleted; // bi xoa
 }

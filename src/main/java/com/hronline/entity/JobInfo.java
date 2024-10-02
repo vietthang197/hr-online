@@ -12,6 +12,8 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmb
 import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -83,4 +85,6 @@ public class JobInfo extends SuperEntity implements Serializable {
     @ToString.Exclude
     @JsonIgnore
     private Set<ResumeInfo> resumeInfos;
+
+    private LocalDateTime expiredDate; // ngay het han
 }

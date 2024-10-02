@@ -113,6 +113,15 @@
                             </p>
                         </div>
                     </div>
+                    <!-- Phần 3 -->
+                    <div class="flex flex-col bg-gray-100 p-4 rounded dark:bg-gray-800">
+                        <div>
+                            <h3 class="text-lg font-semibold dark:text-white">Hình thức làm việc</h3>
+                        </div>
+                        <div class="flex-grow">
+                            <p class="text-sm dark:text-white"><%=job.getJobType()%></p>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="md:col-span-2 border-b border-dashed m-4 "></div>

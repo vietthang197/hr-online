@@ -44,7 +44,7 @@
                 <li class="nav-item">
                     <a href="/admin/resume-data" class="nav-link <% if ("/admin/employee".equals(request.getAttribute("javax.servlet.forward.servlet_path"))) { %> active<%}%>">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Danh sách cv</p>
+                        <p>Danh sách ứng viên</p>
                     </a>
                 </li>
             </ul>

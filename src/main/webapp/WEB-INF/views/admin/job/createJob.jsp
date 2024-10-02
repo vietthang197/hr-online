@@ -175,6 +175,10 @@
                                         <label for="salaryFromCurrency">Đơn vị tiền <span class="text-danger">*</span></label>
                                         <select  class="form-control" id="salaryFromCurrency" name="salaryFromCurrency">
                                             <option value="VND" selected>VND</option>
+                                            <option value="USD">USD</option>
+                                            <option value="EUR">EUR</option>
+                                            <option value="JPY">JPY</option>
+                                            <option value="KRW">KRW</option>
                                         </select>
                                     </div>
                                 </div>
@@ -193,6 +197,10 @@
                                         <label for="salaryToCurrency">Đơn vị tiền <span class="text-danger">*</span></label>
                                         <select  class="form-control" id="salaryToCurrency" name="salaryToCurrency">
                                             <option value="VND" selected>VND</option>
+                                            <option value="USD">USD</option>
+                                            <option value="EUR">EUR</option>
+                                            <option value="JPY">JPY</option>
+                                            <option value="KRW">KRW</option>
                                         </select>
                                     </div>
                                 </div>
@@ -212,6 +220,10 @@
                                         <label for="rewardCurrency">Đơn vị tiền <span class="text-danger">*</span></label>
                                         <select  class="form-control" id="rewardCurrency" name="rewardCurrency">
                                             <option value="VND" selected>VND</option>
+                                            <option value="USD">USD</option>
+                                            <option value="EUR">EUR</option>
+                                            <option value="JPY">JPY</option>
+                                            <option value="KRW">KRW</option>
                                         </select>
                                     </div>
                                 </div>

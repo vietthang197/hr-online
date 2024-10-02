@@ -41,6 +41,7 @@ public interface JobInfoMapper {
                                 .docCode(fileJd.getDocCode())
                                 .build()
                 )
+                .expiredDate(DateUtils.fromDate(jobInfo.getExpiredDate(), DateUtils.DEFAULT_DATE_FORMAT))
                 .build();
     };
     default List<JobInfoDto> toListDto(List<JobInfo> jobInfos, JobLocationMapper jobLocationMapper) {

@@ -1,10 +1,7 @@
 package com.hronline.controller;
 
 import com.hronline.dto.*;
-import com.hronline.entity.Corporation;
-import com.hronline.entity.Industry;
-import com.hronline.entity.JobLocation;
-import com.hronline.entity.JobTitle;
+import com.hronline.entity.*;
 import com.hronline.exception.BindingResultException;
 import com.hronline.mapper.IndustryMapper;
 import com.hronline.services.*;
@@ -18,6 +15,7 @@ import com.hronline.vm.DeleteEntityVM;
 import com.hronline.vm.industry.UpdateIndustryVM;
 import com.hronline.vm.job.CreateJobVM;
 import com.hronline.vm.job.JobInfoSearchVM;
+import com.hronline.vm.job.UpdateJobVM;
 import com.hronline.vm.jobTitle.CreateJobTitleVM;
 import com.hronline.vm.jobTitle.JobTitleSearchVM;
 import com.hronline.vm.jobTitle.UpdateJobTitleVM;
@@ -96,6 +94,43 @@ public class AdminController {
         }
         redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE, "Thêm mới công việc thành công");
         return "redirect:/admin/job/create";
+    }
+
+    @PostMapping("/job/edit")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    public String editJob(HttpServletRequest request, @Valid @ModelAttribute UpdateJobVM updateJobVM, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_ERROR_LIST, bindingResult.getAllErrors());
+            return "redirect:/admin/job/create";
+        }
+        try {
+            jobService.update(updateJobVM);
+        } catch (BindingResultException | IOException e) {
+            bindingResult.reject(String.valueOf(HttpStatus.SC_BAD_REQUEST), e.getMessage());
+            return "redirect:/admin/job/update/";
+        }
+        redirectAttributes.addFlashAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE, "Thêm mới công việc thành công");
+        return "redirect:/admin/job";
+    }
+
+    @GetMapping("/job/edit/{id}")
+    @PreAuthorize("@oauth2Security.hasResourcePermission(#request, 'Admin Resource', 'urn:servlet-authz:protected:admin:access')")
+    public String editJogPage(HttpServletRequest request, HttpServletResponse response, @Valid @NotBlank @PathVariable String id, Model model) throws IOException, BindingResultException {
+        JobInfoDto jobInfo = jobService.findById(id);
+        if (jobInfo == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        } else {
+            model.addAttribute("name", jobInfo.getName());
+            model.addAttribute("taxId", jobInfo.getTaxId());
+            model.addAttribute("phone", jobInfo.getPhone());
+            model.addAttribute("address", jobInfo.getAddress());
+            model.addAttribute("description", jobInfo.getDescription());
+            model.addAttribute("website", jobInfo.getWebsite());
+            model.addAttribute("corpIndustries", industryMapper.toListDto(jobInfo.getIndustries().parallelStream().collect(Collectors.toList())));
+            model.addAttribute("industries", industryService.findAll());
+        }
+        model.addAttribute("id", id);
+        return "admin/corp/corpEdit";
     }
 
     @PostMapping("/job/search")

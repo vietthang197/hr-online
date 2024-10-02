@@ -39,4 +39,6 @@ public class JobInfoDto implements Serializable {
     // số lượng tuyển
     private int vacancies;
     private FileUploadManagementDto fileJd;
+
+    private String expiredDate;
 }
