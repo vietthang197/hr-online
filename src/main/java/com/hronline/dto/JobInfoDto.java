@@ -41,4 +41,5 @@ public class JobInfoDto implements Serializable {
     private FileUploadManagementDto fileJd;
 
     private String expiredDate;
+    private Boolean enabled;
 }

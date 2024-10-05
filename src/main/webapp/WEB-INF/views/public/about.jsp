@@ -46,20 +46,20 @@
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
             <div class="bg-gray-200 p-4 rounded flex flex-col items-center">
-                <h2 class="text-2xl font-bold text-blue-500 mb-2">1000+</h2>
+                <h2 class="text-2xl font-bold text-blue-500 mb-2">10+</h2>
                 <p class="text-gray-600">Doanh nghiệp hợp tác</p>
             </div>
             <div class="bg-gray-200 p-4 rounded flex flex-col items-center">
                 <h2 class="text-2xl font-bold text-blue-500 mb-2">1000+</h2>
-                <p class="text-gray-600">Doanh nghiệp hợp tác</p>
+                <p class="text-gray-600">Ứng viên ứng tuyển</p>
             </div>
             <div class="bg-gray-200 p-4 rounded flex flex-col items-center">
-                <h2 class="text-2xl font-bold text-blue-500 mb-2">1000+</h2>
-                <p class="text-gray-600">Doanh nghiệp hợp tác</p>
+                <h2 class="text-2xl font-bold text-blue-500 mb-2">1</h2>
+                <p class="text-gray-600">Doanh nghiệp duy nhất cho phép đăng tin tuyển dụng miễn phí</p>
             </div>
             <div class="bg-gray-200 p-4 rounded flex flex-col items-center">
-                <h2 class="text-2xl font-bold text-blue-500 mb-2">1000+</h2>
-                <p class="text-gray-600">Doanh nghiệp hợp tác</p>
+                <h2 class="text-2xl font-bold text-blue-500 mb-2">0</h2>
+                <p class="text-gray-600">Chi phí tuyển dụng 0 đồng</p>
             </div>
             <!-- Add more columns as needed -->
         </div>
@@ -75,9 +75,8 @@
                                                                                   d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
                                                                                   clip-rule="evenodd"></path></svg>
             </span>
-                    <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">Flowbite
-                        Application UI v2.0.0 <span
-                                class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ml-3">Latest</span>
+                    <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">Phát triển ứng dụng miễn phí tới cộng đồng<span
+                                class="bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ml-3">Hiện tại</span>
                     </h3>
                     <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">Released
                         on January 13th, 2022

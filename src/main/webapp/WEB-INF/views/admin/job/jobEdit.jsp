@@ -1,0 +1,353 @@
+<%@ page import="org.springframework.web.servlet.support.RequestContextUtils" %>
+<%@ page import="org.springframework.context.ApplicationContext" %>
+<%@ page import="com.hronline.config.Oauth2Security" %>
+<%@ page import="com.hronline.dto.IndustryDto" %>
+<%@ page import="java.util.List" %>
+<%@ page import="org.springframework.validation.ObjectError" %>
+<%@ page import="org.springframework.util.CollectionUtils" %>
+<%@ page import="com.hronline.util.HrConstant" %>
+<%@ page import="com.hronline.dto.JobLocationDto" %>
+<%@ page import="com.hronline.dto.CorporationDto" %>
+<%@ page import="com.hronline.entity.JobLocation" %>
+<%@ page import="java.math.BigDecimal" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+         pageEncoding="UTF-8" %>
+
+<%
+    ApplicationContext applicationContext = RequestContextUtils.findWebApplicationContext(request);
+    Oauth2Security oauth2Security = (Oauth2Security) applicationContext.getBean("oauth2Security");
+    List<JobLocationDto> locations = (List<JobLocationDto>) request.getAttribute("locations");
+    List<CorporationDto> corporations = (List<CorporationDto>) request.getAttribute("corporations");
+    List<String> jobTypes = (List<String>) request.getAttribute("jobTypes");
+%>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sửa công việc</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="/resources/adminlte/plugins/fontawesome-free/css/all.min.css">
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/resources/adminlte/css/adminlte.min.css">
+    <link rel="stylesheet" href="/resources/css/select2.min.css">
+    <style>
+        .dropzone {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        img.preview {
+            max-width: 100%;
+            max-height: 200px;
+            margin-top: 10px;
+            display: none;
+        }
+        .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: red;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<!--
+`body` tag options:
+
+  Apply one or more of the following classes to to the body tag
+  to get the desired effect
+
+  * sidebar-collapse
+  * sidebar-mini
+-->
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    <!-- Navbar -->
+    <jsp:include page="../header.jsp"/>
+    <!-- /.navbar -->
+
+    <jsp:include page="../miniSideMenu.jsp"/>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Sửa công việc</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/admin">Trang chủ</a></li>
+                            <li class="breadcrumb-item active">Sửa công việc</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <div class="content">
+            <% String successMessage = (String) request.getAttribute(HrConstant.ATTRIBUTE_SUCCCES_MESSAGE); %>
+            <% if (successMessage != null) {%>
+            <div class="row alert-msg">
+                <div class="col-md-6">
+                    <ul class="list-group mb-2">
+                        <li class="list-group-item list-group-item-success">
+                            <%=successMessage%>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <%}%>
+            <% List<ObjectError> errorList = (List<ObjectError>) request.getAttribute(HrConstant.ATTRIBUTE_ERROR_LIST); %>
+            <% if (!CollectionUtils.isEmpty(errorList)) {%>
+            <div class="row alert-msg">
+                <div class="col-md-6">
+                    <ul class="list-group mb-2">
+                        <%
+                            for (ObjectError error : errorList) {
+                        %>
+                        <li class="list-group-item list-group-item-danger">
+                            <%=error.getDefaultMessage()%>
+                        </li>
+
+                    </ul>
+                    <%}%>
+                </div>
+            </div>
+            <%}%>
+            <div class="container-fluid">
+                <form action="${pageContext.request.contextPath}/admin/job/create" method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="form-group">
+                            <label for="name">Bật tìm kiếm <span class="text-danger">*</span></label>
+                            <input type="checkbox" name="enabled" id="enabled" <%if((Boolean) request.getAttribute("enabled")) {%> checked <%}%>>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">Tên công việc <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="name" name="name" value="<%=(String) request.getAttribute("name")%>"
+                                       placeholder="Nhân viên kỹ thuật...">
+                            </div>
+                            <!-- /.form-group -->
+                            <div class="form-group">
+                                <label for="tags">Hashtag (Cách nhau bởi dấu phẩy) <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="tags" name="tags" placeholder="" value="<%= (String) request.getAttribute("tags")%>">
+                            </div>
+                            <!-- /.form-group -->
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="location">Nơi làm việc: <span class="text-danger">*</span></label>
+                                <select class="form-control" id="location" name="location">
+                                    <%for (JobLocationDto jobLocation : locations) {%>
+                                    <option value="<%=jobLocation.getId()%>" <%if (jobLocation.getId().equals((String) request.getAttribute("locationId"))){%> selected <%}%>><%=jobLocation.getName()%></option>
+                                    <%}%>
+                                </select>
+                            </div>
+                            <!-- /.form-group -->
+                            <div class="form-group">
+                                <label for="urgent">Cần gấp: <span class="text-danger">*</span></label>
+                                <input type="checkbox" class="form-control-sm" id="urgent" name="urgent" <%if ((Boolean) request.getAttribute("urgent")){%> checked <%}%>>
+                            </div>
+                            <!-- /.form-group -->
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-md-12">
+                            <label for="negotiable">Lương thoả thuận</label>
+                            <input type="checkbox" name="negotiable" id="negotiable" <%if((Boolean) request.getAttribute("negotiable")) {%> checked <%}%>>
+                            <div class="row" id="salaryToGroup">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="salaryFrom">Mức lương thấp nhất <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="salaryFrom" name="salaryFrom" placeholder="" value="<%=(BigDecimal) request.getAttribute("salaryFrom")%>">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="salaryFromCurrency">Đơn vị tiền <span class="text-danger">*</span></label>
+                                        <select  class="form-control" id="salaryFromCurrency" name="salaryFromCurrency">
+                                            <%for(String curr : HrConstant.currencyList) {%>
+                                            <option value="<%=curr%>" <%if(curr.equalsIgnoreCase((String) request.getAttribute("salaryFromCurrency"))){%> selected <%}%>><%=curr%></option>
+                                            <%}%>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" id="salaryFromGroup">
+                                <div class="col-md-8">
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        <label for="salaryTo">Mức lương cao nhất <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="salaryTo" name="salaryTo" placeholder="" value="<%=(BigDecimal) request.getAttribute("salaryTo")%>">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="salaryToCurrency">Đơn vị tiền <span class="text-danger">*</span></label>
+                                        <select  class="form-control" id="salaryToCurrency" name="salaryToCurrency">
+                                            <%for(String curr : HrConstant.currencyList) {%>
+                                            <option value="<%=curr%>" <%if(curr.equalsIgnoreCase((String) request.getAttribute("salaryToCurrency"))){%> selected <%}%>><%=curr%></option>
+                                            <%}%>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label for="reward">Hoa hồng <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="reward" name="reward" placeholder="" value="<%=(BigDecimal) request.getAttribute("reward")%>">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label for="rewardCurrency">Đơn vị tiền <span class="text-danger">*</span></label>
+                                        <select  class="form-control" id="rewardCurrency" name="rewardCurrency">
+                                            <%for(String curr : HrConstant.currencyList) {%>
+                                            <option value="<%=curr%>" <%if(curr.equalsIgnoreCase((String) request.getAttribute("rewardCurrency"))){%> selected <%}%>><%=curr%></option>
+                                            <%}%>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="corporation">Đăng cho công ty</label>
+                                        <select class="form-control" id="corporation" name="corporation">
+                                            <%for (CorporationDto corp : corporations) {%>
+                                            <option value="<%=corp.getId()%>" <%if (corp.getId().equals((String)request.getAttribute("corpId"))){%> checked <%}%>><%=corp.getName()%></option>
+                                            <%}%>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="vacancies">Số lượng tuyển: <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="vacancies" name="vacancies" value="<%= request.getAttribute("vacancies")%>">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        <label for="fileJd">File Job detail: <span class="text-danger">*</span></label>
+                                        <input type="file" class="form-control" id="fileJd" name="fileJd">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <!-- /.form-group -->
+                                    <div class="form-group">
+                                        <label for="jobType">Loại Job <span class="text-danger">*</span></label>
+                                        <select class="form-control" id="jobType" name="jobType">
+                                            <%for (String jobType : jobTypes) {%>
+                                            <option value="<%=jobType%>" <%if (jobType.equals((String) request.getAttribute("jobType"))){%> selected <%}%>><%=jobType%></option>
+                                            <%}%>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.form-group -->
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="description">Mô tả công việc</label>
+                                <textarea rows="4" class="form-control ckeditor" id="description" name="description"
+                                          placeholder=""><%=request.getAttribute("description")%></textarea>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <% if (oauth2Security.hasResourcePermission(request, "Admin Resource", "urn:servlet-authz:protected:admin:access")) { %>
+                    <button type="submit" class="btn btn-success">Cập nhật</button>
+                    <%}%>
+                </form>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    <jsp:include page="../footer.jsp"/>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="/resources/adminlte/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="/resources/adminlte/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE -->
+<script src="/resources/adminlte/js/adminlte.js"></script>
+<script src="/resources/js/select2.min.js"></script>
+<script src="/resources/js/ckeditor/ckeditor.js"></script>
+<script src="/resources/js/ckeditor/adapters/jquery.js"></script>
+<script>
+    $(".alert-msg").fadeTo(2000, 50000).slideUp(50000, function(){
+        $(".alert-msg").slideUp(50000);
+    });
+</script>
+<script>
+    $('#industries').select2({
+        multiple: true
+    });
+
+    $('#negotiable').change(function (event) {
+        if (this.checked) {
+            $('#salaryFrom').prop('disabled', true);
+            $('#salaryFromCurrency').prop('disabled', true);
+            $('#salaryTo').prop('disabled', true);
+            $('#salaryToCurrency').prop('disabled', true);
+        } else {
+            $('#salaryFrom').prop('disabled', false);
+            $('#salaryFromCurrency').prop('disabled', false);
+            $('#salaryTo').prop('disabled', false);
+            $('#salaryToCurrency').prop('disabled', false);
+        }
+    })
+
+    <%%>
+        $(document).ready(function() {
+            $('#negotiable').trigger('change');
+        })
+    <%%>
+</script>
+</body>
+</html>

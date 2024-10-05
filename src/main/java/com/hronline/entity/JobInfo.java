@@ -26,6 +26,14 @@ import java.util.Set;
 @Table(name = "job_info")
 @Indexed
 @ToString
+@NamedEntityGraph(name = "jobInfoCorpFileResumeLocation", attributeNodes = {
+        @NamedAttributeNode("jobLocation"),
+        @NamedAttributeNode(value = "corporation", subgraph = "corp.industries"),
+        @NamedAttributeNode("fileJd"),
+        @NamedAttributeNode("resumeInfos")
+}, subgraphs = {
+        @NamedSubgraph(name = "corp.industries", attributeNodes = @NamedAttributeNode("industries"))
+})
 public class JobInfo extends SuperEntity implements Serializable {
     @Id
     @GeneratedValue(generator = "hibernate-uuid")
@@ -87,4 +95,6 @@ public class JobInfo extends SuperEntity implements Serializable {
     private Set<ResumeInfo> resumeInfos;
 
     private LocalDateTime expiredDate; // ngay het han
+
+    private Boolean enabled;
 }

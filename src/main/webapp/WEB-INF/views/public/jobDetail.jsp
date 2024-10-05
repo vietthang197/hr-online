@@ -126,7 +126,7 @@
             </div>
             <div class="md:col-span-2 border-b border-dashed m-4 "></div>
             <div>
-                <h3 class="text-lg font-semibold dark:text-white">Mô tả công việc</h3>
+                <h3 class="text-lg font-semibold dark:text-white">Yêu cầu và mô tả công việc</h3>
             </div>
             <div class="md:col-span-1 mt-4">
                 <div class="text-sm dark:text-white">

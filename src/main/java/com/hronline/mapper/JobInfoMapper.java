@@ -42,10 +42,11 @@ public interface JobInfoMapper {
                                 .build()
                 )
                 .expiredDate(DateUtils.fromDate(jobInfo.getExpiredDate(), DateUtils.DEFAULT_DATE_FORMAT))
+                .enabled(jobInfo.getEnabled())
                 .build();
     };
     default List<JobInfoDto> toListDto(List<JobInfo> jobInfos, JobLocationMapper jobLocationMapper) {
-        return jobInfos.parallelStream().map(jobInfo -> toDto(jobInfo, jobLocationMapper)).collect(Collectors.toList());
+        return jobInfos.stream().map(jobInfo -> toDto(jobInfo, jobLocationMapper)).collect(Collectors.toList());
     };
     default PaginationDto<JobInfoDto> toPaginationDto(PaginationDto<JobInfo> jobInfoPaginationDto, JobLocationMapper jobLocationMapper, CorporationMapper corporationMapper) {
         PaginationDto<JobInfoDto> paginationDto = new PaginationDto<>();

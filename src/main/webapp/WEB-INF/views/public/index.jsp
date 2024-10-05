@@ -71,7 +71,7 @@
                     <div class="w-1/5 p-4">
                         <!-- Logo -->
                         <img src="https://static.recruitery.co/uploads/images/08ab20c97c8b4d2783065d01072f0839_20210514101545.jpeg"
-                             alt="Logo" class="w-16 h-16 object-contain">
+                             alt="<%=job.getCorporation().getName()%>" title="<%=job.getCorporation().getName()%>" class="w-16 h-16 object-contain">
                     </div>
                     <div class="w-4/5 p-4 relative">
                         <!-- Urgent -->

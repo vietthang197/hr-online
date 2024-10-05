@@ -208,9 +208,18 @@
                 {"data": "reward", "render": $.fn.dataTable.render.text()},
                 {"data": "jobLocation", "render": $.fn.dataTable.render.text()},
                 {"data": "corporation", "render": $.fn.dataTable.render.text()},
-                {"data": "urgent", "render": $.fn.dataTable.render.text()},
+                {"data": "urgent", "render": function (data) {
+                        if (data) {
+                            return "<span>&#10004;</span>";
+                        } else {
+                            return "<span></span>";
+                        }
+                    }
+                },
                 {"data": "createdDate", "render": $.fn.dataTable.render.text()},
-                {"data": "description", "render": $.fn.dataTable.render.text()},
+                {"data": "description", "render": function(data) {
+                    return "";
+                    }},
                 {"data": "vacancies", "render": $.fn.dataTable.render.text()},
                 {"data": "fileJd", "render": function (data) {
                         if (data) {

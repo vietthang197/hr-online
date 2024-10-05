@@ -105,7 +105,7 @@ public class AdminController {
         }
         try {
             jobService.update(updateJobVM);
-        } catch (BindingResultException | IOException e) {
+        } catch (Exception e) {
             bindingResult.reject(String.valueOf(HttpStatus.SC_BAD_REQUEST), e.getMessage());
             return "redirect:/admin/job/update/";
         }
@@ -120,17 +120,35 @@ public class AdminController {
         if (jobInfo == null) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         } else {
+            List<JobLocationDto> locationDtos = jobLocationService.findAll();
+            model.addAttribute("locations", locationDtos);
+
+            List<CorporationDto> corporationDtos = corpService.findAll();
+            model.addAttribute("corporations", corporationDtos);
+
+            model.addAttribute("jobTypes", HrConstant.jobTypeList);
+
             model.addAttribute("name", jobInfo.getName());
-            model.addAttribute("taxId", jobInfo.getTaxId());
-            model.addAttribute("phone", jobInfo.getPhone());
-            model.addAttribute("address", jobInfo.getAddress());
+            model.addAttribute("tags", jobInfo.getTags());
+            model.addAttribute("jobType", jobInfo.getJobType());
+            model.addAttribute("negotiable", jobInfo.getNegotiable());
+            model.addAttribute("salaryFrom", jobInfo.getSalaryFrom());
+            model.addAttribute("salaryFromCurrency", jobInfo.getSalaryFromCurrency());
+            model.addAttribute("salaryTo", jobInfo.getSalaryTo());
+            model.addAttribute("salaryToCurrency", jobInfo.getSalaryToCurrency());
+            model.addAttribute("locationId", jobInfo.getJobLocation().getId());
+            model.addAttribute("urgent", jobInfo.isUrgent());
+            model.addAttribute("reward", jobInfo.getReward());
+            model.addAttribute("rewardCurrency", jobInfo.getRewardCurrency());
+            model.addAttribute("corpId", jobInfo.getCorporation().getId());
+            model.addAttribute("vacancies", jobInfo.getVacancies());
+            model.addAttribute("jobType", jobInfo.getJobType());
             model.addAttribute("description", jobInfo.getDescription());
-            model.addAttribute("website", jobInfo.getWebsite());
-            model.addAttribute("corpIndustries", industryMapper.toListDto(jobInfo.getIndustries().parallelStream().collect(Collectors.toList())));
-            model.addAttribute("industries", industryService.findAll());
+            model.addAttribute("expiredDate", jobInfo.getExpiredDate());
+            model.addAttribute("enabled", jobInfo.getEnabled());
         }
         model.addAttribute("id", id);
-        return "admin/corp/corpEdit";
+        return "admin/job/jobEdit";
     }
 
     @PostMapping("/job/search")

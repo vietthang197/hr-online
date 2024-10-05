@@ -20,6 +20,7 @@ import com.hronline.util.HrConstant;
 import com.hronline.vm.corp.CorpSearchVM;
 import com.hronline.vm.job.CreateJobVM;
 import com.hronline.vm.job.JobInfoSearchVM;
+import com.hronline.vm.job.UpdateJobVM;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -84,6 +85,7 @@ public class JobServiceImpl implements JobService {
                 .urgent(request.isUrgent())
                 .vacancies(request.getVacancies())
                 .fileJd(fileUploadManagement)
+                .enabled(Boolean.FALSE)
                 .build();
 
         jobRepository.save(jobInfo);
@@ -112,5 +114,10 @@ public class JobServiceImpl implements JobService {
         if (jobInfoOptional.isEmpty())
             throw new BindingResultException("Job khong ton tai");
         return JobInfoMapper.toDto(jobInfoOptional.get(), jobLocationMapper);
+    }
+
+    @Override
+    public void update(UpdateJobVM updateJobVM) {
+
     }
 }

@@ -9,6 +9,8 @@ spring:
     hikari:
       pool-name: Hikari
       validation-timeout: 1000
+      maximum-pool-size: 1000
+      minimum-idle: 10
   application:
     name: HrOnline
   jpa:
